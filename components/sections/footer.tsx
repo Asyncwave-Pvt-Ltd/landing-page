@@ -1,32 +1,33 @@
 "use client";
 
 import Image from "next/image";
-import { Linkedin, Twitter, Github, Mail } from "lucide-react";
+import { Linkedin, Github, Mail } from "lucide-react";
+import { useContactDialog } from "@/components/contact-dialog";
 
 const serviceLinks = [
-  { label: "AI Product Development", id: "services" },
-  { label: "AI Chatbot Development", id: "services" },
-  { label: "Specialized AI Solutions", id: "services" },
-  { label: "Agentic Workflows", id: "services" },
-  { label: "Web & Mobile Apps", id: "services" },
+  { label: "AI Product Development", href: "#services" },
+  { label: "AI Chatbot Development", href: "#services" },
+  { label: "Specialized AI Solutions", href: "#services" },
+  { label: "Agentic Workflows", href: "#services" },
+  { label: "Web & Mobile Apps", href: "#services" },
 ];
 
 const companyLinks = [
-  { label: "About Us", id: "why-us" },
-  { label: "How We Work", id: "how-we-work" },
-  { label: "Case Studies", id: "case-studies" },
-  { label: "FAQ", id: "faq" },
-  { label: "Contact", id: "contact" },
+  { label: "About Us", href: "#why-us" },
+  { label: "Testimonials", href: "#testimonials" },
+  { label: "Blogs", href: "/blog" },
+  { label: "FAQ", href: "#faq" },
+  { label: "Contact", href: "#contact" },
 ];
 
 const socialLinks = [
-  { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-  { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
-  { icon: Github, href: "https://github.com", label: "GitHub" },
-  { icon: Mail, href: "mailto:hello@asyncwave.com", label: "Email" },
+  { icon: Linkedin, href: "https://linkedin.com/company/asyncwave-pvt-ltd", label: "LinkedIn" },
+  { icon: Github, href: "https://github.com/asyncwave-pvt-ltd", label: "GitHub" },
+  { icon: Mail, href: "mailto:contact@asyncwave.in", label: "Email" },
 ];
 
 export default function Footer() {
+  const contactDialog = useContactDialog();
   return (
     <footer className="bg-[#0D1B2A] text-white border-t border-white/10">
       {/* Main Footer */}
@@ -34,19 +35,19 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-1">
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            <a
+              href="#hero"
               className="flex items-center gap-2.5 mb-5"
             >
               <Image
                 src="/logo_color.png"
-                alt="Asyncwave"
+                alt="Asyncwave — AI Development Company India"
                 width={36}
                 height={36}
                 className="rounded-md"
               />
               <span className="text-xl font-bold tracking-wide">Asyncwave</span>
-            </button>
+            </a>
             <p className="text-white/50 text-sm leading-relaxed mb-6">
               Assisting Human Intelligence. We build AI-powered products,
               chatbots, and automated workflows that amplify what your team can
@@ -79,9 +80,12 @@ export default function Footer() {
             <ul className="space-y-3">
               {serviceLinks.map((link) => (
                 <li key={link.label}>
-                  <button className="text-white/60 hover:text-white text-sm transition-colors text-left">
+                  <a
+                    href={link.href}
+                    className="text-white/60 hover:text-white text-sm transition-colors"
+                  >
                     {link.label}
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -95,9 +99,12 @@ export default function Footer() {
             <ul className="space-y-3">
               {companyLinks.map((link) => (
                 <li key={link.label}>
-                  <button className="text-white/60 hover:text-white text-sm transition-colors text-left">
+                  <a
+                    href={link.href}
+                    className="text-white/60 hover:text-white text-sm transition-colors"
+                  >
                     {link.label}
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -112,10 +119,21 @@ export default function Footer() {
               <div>
                 <p className="text-white/40 text-xs mb-1">Email</p>
                 <a
-                  href="mailto:hello@asyncwave.com"
+                  href="mailto:contact@asyncwave.in"
                   className="text-white/70 hover:text-white transition-colors"
                 >
-                  hello@asyncwave.com
+                  contact@asyncwave.in
+                </a>
+              </div>
+              <div>
+                <p className="text-white/40 text-xs mb-1">Whatsapp</p>
+                <a
+                  href="https://wa.me/917340417987?text=Hello%20Asyncwave!%20I%20would%20like%20to%20inquire%20about%20your%20AI%20development%20services."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/70 hover:text-white transition-colors"
+                >
+                  +91 7340417987
                 </a>
               </div>
               <div>
@@ -123,7 +141,10 @@ export default function Footer() {
                 <p className="text-white/70">Mon – Fri, 9am – 6pm IST</p>
               </div>
             </div>
-            <button className="inline-flex items-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] text-white text-sm font-bold px-5 py-3 rounded transition-colors">
+            <button
+              onClick={() => contactDialog?.openDialog()}
+              className="inline-flex items-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] text-white text-sm font-bold px-5 py-3 rounded transition-colors"
+            >
               Send a Message
             </button>
           </div>
@@ -134,7 +155,7 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-white/40 text-sm">
-            © {new Date().getFullYear()} Asyncwave. All rights reserved.
+            © 2025 Asyncwave. All rights reserved.
           </p>
           <p className="text-white/40 text-xs uppercase tracking-widest">
             Assisting Human Intelligence

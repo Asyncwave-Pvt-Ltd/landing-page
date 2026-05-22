@@ -4,10 +4,7 @@ import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import {
-  GoogleReCaptchaProvider,
-  useGoogleReCaptcha,
-} from "react-google-recaptcha-v3";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { Mail, MessageSquare, MapPin, ArrowRight, Check } from "lucide-react";
 
 import {
@@ -51,7 +48,7 @@ const whyUs = [
   "Ongoing support after launch",
 ];
 
-function ContactFormContent() {
+export function ContactFormContent() {
   const { toast } = useToast();
   const { executeRecaptcha } = useGoogleReCaptcha();
 
@@ -115,14 +112,7 @@ function ContactFormContent() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-100">
-      <h3 className="text-2xl font-extrabold text-[#0D1B2A] mb-1">
-        Send a Message
-      </h3>
-      <p className="text-gray-500 text-sm mb-8">
-        Fill in the form and we&apos;ll be in touch within 24 hours.
-      </p>
-
+    <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           <FormField
@@ -269,12 +259,7 @@ export default function ContactSection() {
 
           {/* Right: Form */}
           <div className="lg:col-span-3">
-            <GoogleReCaptchaProvider
-              reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-              scriptProps={{ async: false, defer: false, appendTo: "head" }}
-            >
-              <ContactFormContent />
-            </GoogleReCaptchaProvider>
+            <ContactFormContent />
           </div>
         </div>
       </div>

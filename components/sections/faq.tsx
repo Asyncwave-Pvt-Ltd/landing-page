@@ -75,11 +75,13 @@ export default function FAQ() {
                     )}
                   </span>
                 </button>
-                {openIndex === i && (
-                  <div className="px-6 pb-5 text-gray-500 text-sm leading-relaxed border-t border-gray-100 pt-4">
-                    {faq.a}
-                  </div>
-                )}
+                <div
+                  className={`px-6 pb-5 text-gray-500 text-sm leading-relaxed border-t border-gray-100 pt-4 ${
+                    openIndex === i ? "block" : "hidden"
+                  }`}
+                >
+                  {faq.a}
+                </div>
               </div>
             ))}
           </div>

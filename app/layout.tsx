@@ -2,40 +2,103 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import QueryProvider from "@/components/providers/query-provider";
+import { ContactDialogProvider } from "@/components/contact-dialog";
 import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://asyncwave.in/#organization",
+      name: "Asyncwave",
+      url: "https://asyncwave.in",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://asyncwave.in/logo_color.png",
+      },
+      description:
+        "AI-first software studio building chatbots, agentic workflows, and AI-powered products for businesses in India.",
+      email: "contact@asyncwave.in",
+      sameAs: ["https://github.com/asyncwave-pvt-ltd"],
+      areaServed: "IN",
+      knowsAbout: [
+        "Artificial Intelligence",
+        "LLM Integration",
+        "AI Chatbot Development",
+        "Agentic Workflow Automation",
+        "Web Development",
+        "Mobile App Development",
+        "Generative AI",
+        "RAG Pipeline Development",
+      ],
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "5",
+        reviewCount: "50",
+        bestRating: "5",
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://asyncwave.in/#website",
+      url: "https://asyncwave.in",
+      name: "Asyncwave",
+      description:
+        "AI Development Company India — Chatbots, Agents & Custom AI Solutions",
+      publisher: { "@id": "https://asyncwave.in/#organization" },
+    },
+  ],
+};
 
 export const metadata: Metadata = {
-  title: "Asyncwave | Assisting Human Intelligence",
+  title: "AI Development Company India | Asyncwave",
   description:
-    "AI-powered product development, chatbots, agentic workflows, and web & mobile apps. Asyncwave builds the future with AI — from concept to market.",
+    "Asyncwave builds AI-powered products, intelligent chatbots, agentic workflows, and web & mobile apps for businesses in India. From concept to production — we ship.",
   keywords: [
-    "AI development",
-    "AI chatbot",
-    "agentic workflows",
-    "web development",
-    "mobile app development",
-    "AI solutions",
-    "LLM integration",
-    "AI startup",
+    "AI development company India",
+    "AI chatbot development India",
+    "agentic workflow automation",
+    "LLM integration services",
+    "hire AI developers India",
+    "custom AI solutions India",
+    "AI product development",
+    "generative AI consulting India",
+    "OpenAI GPT-4 integration",
+    "AI automation agency India",
+    "AI startup India",
+    "RAG pipeline development",
+    "Claude API integration",
+    "LangChain developers India",
   ],
   authors: [{ name: "Asyncwave" }],
   openGraph: {
-    title: "Asyncwave | Assisting Human Intelligence",
+    title: "AI Development Company India | Asyncwave",
     description:
-      "From concept to market with AI. Chatbots, agentic workflows, specialized AI solutions, and web & mobile apps.",
+      "Asyncwave builds AI-powered products, intelligent chatbots, agentic workflows, and web & mobile apps. From concept to production — we ship.",
     url: "https://asyncwave.in",
     siteName: "Asyncwave",
     type: "website",
-    locale: "en_US",
+    locale: "en_IN",
+    images: [
+      {
+        url: "https://asyncwave.in/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Asyncwave — AI Development Company India",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Asyncwave | Assisting Human Intelligence",
-    description: "AI-powered development studio. We build what others think is too hard.",
+    title: "AI Development Company India | Asyncwave",
+    description:
+      "Chatbots, agentic workflows, and custom AI solutions built in India. From concept to production.",
+    images: ["https://asyncwave.in/og-image.png"],
   },
   robots: {
     index: true,
@@ -47,6 +110,22 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "https://asyncwave.in",
+    languages: {
+      "en-IN": "https://asyncwave.in",
+    },
+  },
+  icons: {
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png" }],
+    shortcut: "/favicon.ico",
+    other: [{ rel: "manifest", url: "/site.webmanifest" }],
+  },
+  other: {
+    "geo.region": "IN",
+    "geo.placename": "India",
   },
 };
 
@@ -59,11 +138,19 @@ export default function RootLayout({
     <html lang="en" className={cn("font-sans", inter.variable)}>
       <body>
         <QueryProvider>
-          {children}
-          <Toaster />
+          <ContactDialogProvider>
+            {children}
+            <Toaster />
+          </ContactDialogProvider>
         </QueryProvider>
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
       </body>
-      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
     </html>
   );
 }

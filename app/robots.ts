@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://asyncwave.com/sitemap.xml",
+    sitemap: "https://asyncwave.in/sitemap.xml",
   };
 }

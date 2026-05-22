@@ -1,17 +1,20 @@
 "use client";
 
-// import { scrollToElement } from "@/lib/utils";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { useContactDialog } from "@/components/contact-dialog";
+import Link from "next/link";
 
 const stats = [
-  { value: "120+", label: "Projects Delivered" },
-  { value: "50+", label: "Happy Clients" },
-  { value: "5+", label: "Years Experience" },
+  { value: "20+", label: "Projects Delivered" },
+  { value: "10+", label: "Happy Clients" },
+  { value: "2+", label: "Years Experience" },
   { value: "100%", label: "Client Satisfaction" },
 ];
 
 export default function Hero() {
+  const contactDialog = useContactDialog();
   return (
     <section
       id="hero"
@@ -36,40 +39,44 @@ export default function Hero() {
               </div>
 
               <h1 className="text-4xl md:text-5xl lg:text-[3.25rem] font-extrabold text-white leading-tight mb-6">
-                Elevate Your Business<br />
-                with{" "}
-                <span className="text-[#FF5722]">AI Excellence</span>
+                Elevate Your Business
+                <br />
+                with <span className="text-[#FF5722]"> AI Excellence</span>
               </h1>
 
               <p className="text-white/70 text-lg leading-relaxed mb-10 max-w-lg">
-                We build AI-powered products, intelligent chatbots, and automated
-                workflows that amplify what your team can do — from concept to
-                production.
+                We build AI-powered products, intelligent chatbots, and
+                automated workflows that amplify what your team can do — from
+                concept to production.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button
-                  // onClick={() => scrollToElement("contact")}
+                  onClick={() => contactDialog?.openDialog()}
                   className="bg-[#FF5722] hover:bg-[#E64A19] text-white font-bold px-8 py-6 rounded transition-colors text-sm uppercase tracking-wide"
                 >
                   Get Started
                   <ArrowRight className="w-4 h-4" />
                 </Button>
-                <Button
-                  // onClick={() => scrollToElement("services")}
-                  className="bg-transparent hover:bg-transparent border-2 border-white/30 hover:border-[#FF5722] text-white hover:text-[#FF5722] font-bold px-8 py-6 rounded transition-colors text-sm uppercase tracking-wide"
-                  variant="outline"
+                <Link
+                  href="/#services"
+                  className="bg-transparent hover:bg-transparent border-2 border-white/30 hover:border-[#FF5722] text-white hover:text-[#FF5722] font-bold px-8 py-3 rounded transition-colors text-sm uppercase tracking-wide"
                 >
                   Explore Services
-                  <ChevronRight className="w-4 h-4" />
-                </Button>
+                  <ChevronRight className="w-4 h-4 inline-block mb-1 ml-2" />
+                </Link>
               </div>
             </div>
 
-            {/* Right: Placeholder box */}
             <div className="hidden lg:flex items-center justify-center">
-              <div className="w-full max-w-md aspect-square rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
-                <p className="text-white/30 text-sm">[ Your image here ]</p>
+              <div className="w-full max-w-md aspect-square rounded-2xl bg-white/5 border border-white/10 overflow-clip">
+                <Image
+                  src="/hero.jpeg"
+                  alt="Hero Image"
+                  width={400}
+                  height={400}
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>

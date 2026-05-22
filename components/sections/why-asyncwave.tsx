@@ -2,6 +2,8 @@
 
 import { Check, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { useContactDialog } from "../contact-dialog";
 
 const reasons = [
   "Deep specialization in AI & LLM technologies",
@@ -13,6 +15,7 @@ const reasons = [
 ];
 
 export default function WhyAsyncwave() {
+  const contactDialog = useContactDialog();
   return (
     <section id="why-us" className="py-24 bg-[#F8F9FA]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -20,30 +23,46 @@ export default function WhyAsyncwave() {
           {/* Left: Image placeholder grid */}
           <div className="relative">
             <div className="grid grid-cols-2 gap-4">
-              <div className="aspect-square rounded-lg bg-[#0D1B2A] flex items-center justify-center">
-                <p className="text-white/30 text-xs text-center px-4">
-                  [ Image ]
-                </p>
+              <div className="aspect-square rounded-lg overflow-clip">
+                <Image
+                  src="/why-asyncwave-1.jpg"
+                  alt="Hero Image"
+                  width={400}
+                  height={400}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                />
               </div>
-              <div className="aspect-square rounded-lg bg-[#FF5722] flex items-center justify-center mt-8">
-                <p className="text-white/60 text-xs text-center px-4">
-                  [ Image ]
-                </p>
+              <div className="aspect-square rounded-lg overflow-clip mt-8">
+                <Image
+                  src="/why-asyncwave-2.webp"
+                  alt="Hero Image"
+                  width={400}
+                  height={400}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                />
               </div>
-              <div className="aspect-square rounded-lg bg-[#E64A19] flex items-center justify-center -mt-8">
-                <p className="text-white/60 text-xs text-center px-4">
-                  [ Image ]
-                </p>
+              <div className="aspect-square rounded-lg overflow-clip -mt-8">
+                <Image
+                  src="/why-asyncwave-3.webp"
+                  alt="Hero Image"
+                  width={400}
+                  height={400}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                />
               </div>
-              <div className="aspect-square rounded-lg bg-[#1A2E42] flex items-center justify-center">
-                <p className="text-white/30 text-xs text-center px-4">
-                  [ Image ]
-                </p>
+              <div className="aspect-square rounded-lg overflow-clip">
+                <Image
+                  src="/why-asyncwave-4.jpeg"
+                  alt="Hero Image"
+                  width={400}
+                  height={400}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                />
               </div>
             </div>
             {/* Experience badge */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-[#FF5722] text-white rounded-lg px-6 py-4 text-center shadow-xl">
-              <div className="text-3xl font-extrabold">5+</div>
+              <div className="text-3xl font-extrabold">2+</div>
               <div className="text-sm font-medium">Years in AI</div>
             </div>
           </div>
@@ -77,7 +96,10 @@ export default function WhyAsyncwave() {
               ))}
             </ul>
 
-            <Button className="inline-flex items-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] text-white font-bold px-8 py-4 rounded transition-colors text-sm uppercase tracking-wide">
+            <Button
+              className="inline-flex items-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] text-white font-bold px-8 py-4 rounded transition-colors text-sm uppercase tracking-wide"
+              onClick={() => contactDialog?.openDialog()}
+            >
               Start a Project <ArrowRight className="w-4 h-4" />
             </Button>
           </div>

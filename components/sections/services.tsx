@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useContactDialog } from "../contact-dialog";
 
 const services = [
   {
@@ -20,13 +21,13 @@ const services = [
   },
   {
     icon: Bot,
-    title: "AI Chatbot Development",
+    title: "AI Chatbot Development Services",
     description:
       "Intelligent chatbots that understand context, resolve queries instantly, and provide 24/7 support across every channel your customers use.",
   },
   {
     icon: Brain,
-    title: "Specialized AI Solutions",
+    title: "Custom AI Solutions & LLM Integration",
     description:
       "Custom AI experiences — personal tutors, assistants, recommendation engines — tailored to your exact domain and business requirements.",
   },
@@ -45,6 +46,7 @@ const services = [
 ];
 
 export default function Services() {
+  const contactDialog = useContactDialog();
   return (
     <section id="services" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,7 +58,7 @@ export default function Services() {
             <span className="w-6 h-[2px] bg-[#FF5722]" />
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#0D1B2A] mb-4">
-            Exclusive AI Services
+            Exclusive AI Development Services
           </h2>
           <p className="text-gray-500 max-w-xl mx-auto">
             We combine deep AI expertise with solid engineering to deliver
@@ -76,7 +78,7 @@ export default function Services() {
               >
                 {/* Orange circle icon */}
                 <div className="flex gap-2 items-center mb-4">
-                  <div className="w-12 h-12 rounded-full bg-[#FF5722] flex items-center justify-center group-hover:bg-[#E64A19] transition-colors">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#FF5722] flex items-center justify-center group-hover:bg-[#E64A19] transition-colors">
                     <Icon className="w-7 h-7 text-white" />
                   </div>
 
@@ -84,13 +86,13 @@ export default function Services() {
                     {service.title}
                   </h3>
                 </div>
-                <p className="text-gray-500 text-sm leading-relaxed mb-6">
+                <p className="text-gray-500 text-sm leading-relaxed">
                   {service.description}
                 </p>
 
-                <span className="inline-flex items-center gap-1 text-[#FF5722] text-sm font-semibold group-hover:gap-2 transition-all">
+                {/* <span className="inline-flex items-center gap-1 text-[#FF5722] text-sm font-semibold group-hover:gap-2 transition-all">
                   Learn More <ArrowRight className="w-4 h-4" />
-                </span>
+                </span> */}
               </Card>
             );
           })}
@@ -109,7 +111,10 @@ export default function Services() {
                 together.
               </p>
             </div>
-            <Button className="mt-8 inline-flex items-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] text-white text-sm font-bold px-6 py-3 rounded transition-colors w-fit">
+            <Button
+              className="mt-8 inline-flex items-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] text-white text-sm font-bold px-6 py-3 rounded transition-colors w-fit"
+              onClick={() => contactDialog?.openDialog()}
+            >
               Talk to Us <ArrowRight className="w-4 h-4" />
             </Button>
           </Card>

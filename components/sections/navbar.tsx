@@ -13,23 +13,22 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
+import { useContactDialog } from "@/components/contact-dialog";
 
 const navLinks = [
   { label: "Home", href: "/" },
   {
     label: "Company",
-    href: "/company",
+    href: "/",
     subMenu: [
-      { label: "About Us", href: "/about-us" },
-      { label: "Testimonials", href: "/testimonials" },
-      { label: "Pricing", href: "/pricing" },
-      { label: "FAQ", href: "/faq" },
+      { label: "About Us", href: "/#why-us" },
+      { label: "Testimonials", href: "/#testimonials" },
+      { label: "FAQ", href: "/#faq" },
     ],
   },
-  { label: "Portfolio", href: "/portfolio" },
-  { label: "Services", href: "/services" },
+  { label: "Services", href: "/#services" },
   { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "/contact" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 const NavLinks = ({ className }: { className?: string }) => {
@@ -79,6 +78,7 @@ const NavLinks = ({ className }: { className?: string }) => {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const contactDialog = useContactDialog();
 
   const isMobile = useBreakpoint({
     sm: true,
@@ -123,6 +123,7 @@ export default function Navbar() {
           </Link>
           <NavLinks className={cn("hidden md:flex", open && "flex gap-4")} />
           <Button
+            onClick={() => contactDialog?.openDialog()}
             className={cn(
               "bg-[#FF5722] hover:bg-[#E64A19] font-bold px-8 py-3 text-white rounded-full",
               open && "bg-white text-[#FF5722]",

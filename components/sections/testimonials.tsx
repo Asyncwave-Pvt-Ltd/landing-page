@@ -23,27 +23,6 @@ const reviews = [
       "Our AI tutoring platform has transformed how students learn. Asyncwave truly understood our vision and executed it flawlessly. Highly recommend.",
     rating: 5,
   },
-  {
-    name: "David Chen",
-    role: "CTO, LogisticsPro",
-    review:
-      "From concept to launch in 8 weeks. The team's AI expertise is world-class, and they stayed within budget. We're already planning our next project with them.",
-    rating: 5,
-  },
-  {
-    name: "Emily Watson",
-    role: "Product Manager, HealthAI",
-    review:
-      "Transparent, fast, and deeply skilled in AI. They helped us build something we couldn't have done in-house. The ongoing support has been excellent.",
-    rating: 5,
-  },
-  {
-    name: "Carlos Rivera",
-    role: "Director, MediaGroup",
-    review:
-      "We needed a specialized AI solution and Asyncwave nailed it. They asked the right questions, moved quickly, and the end result exceeded our expectations.",
-    rating: 5,
-  },
 ];
 
 function Stars({ count }: { count: number }) {
@@ -58,7 +37,7 @@ function Stars({ count }: { count: number }) {
 
 export default function Testimonials() {
   return (
-    <section className="py-24 bg-white">
+    <section id="testimonials" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
@@ -71,7 +50,8 @@ export default function Testimonials() {
             What Our Clients Say
           </h2>
           <p className="text-gray-500 max-w-xl mx-auto">
-            We let our work speak for itself — but our clients' words mean even more.
+            We let our work speak for itself — but our clients' words mean even
+            more.
           </p>
         </div>
 
@@ -91,7 +71,9 @@ export default function Testimonials() {
                   {r.name.charAt(0)}
                 </div>
                 <div>
-                  <div className="font-bold text-[#0D1B2A] text-sm">{r.name}</div>
+                  <div className="font-bold text-[#0D1B2A] text-sm">
+                    {r.name}
+                  </div>
                   <div className="text-gray-400 text-xs">{r.role}</div>
                 </div>
               </div>
