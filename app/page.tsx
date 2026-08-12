@@ -70,15 +70,13 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <Navbar />
       <Hero />
       <Services />
       <WhyAsyncwave />
       {/* <CaseStudies /> */}
-      <Testimonials />
+      {/* <Testimonials /> */}
       <FAQ />
       <CTABanner />
-      <Footer />
     </main>
   );
 }

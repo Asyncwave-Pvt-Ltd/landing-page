@@ -1,6 +1,8 @@
 "use client";
 
-import { useCallback } from "react";
+import "react-phone-number-input/style.css";
+
+import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -19,6 +21,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { contactFormSchema, type ContactFormValues } from "@/lib/schema";
+import PhoneInput from "react-phone-number-input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Button } from "@/components/ui/button";
 
 const contactInfo = [
   {
@@ -48,7 +55,149 @@ const whyUs = [
   "Ongoing support after launch",
 ];
 
-export function ContactFormContent() {
+const servicesCol1 = [
+  {
+    label: "AI Chatbot",
+    id: "ai-chatbot",
+  },
+  {
+    label: "Custom AI Agents",
+    id: "custom-ai-agents",
+  },
+  {
+    label: "AI Workflow Automation",
+    id: "ai-workflow-automation",
+  },
+  {
+    label: "Whatsapp AI automation",
+    id: "whatsapp-ai-automation",
+  },
+  {
+    label: "Generative AI solutions",
+    id: "gen-ai-solutions",
+  },
+  {
+    label: "Customer Support Automation",
+    id: "customer-support-automation",
+  },
+  {
+    label: "Sales & Lead Generation Automation",
+    id: "sales-lead-automation",
+  },
+  {
+    label: "AI Data Analysis & Reporting",
+    id: "data-analysis-reporting",
+  },
+  {
+    label: "AI Integration with existing software",
+    id: "ai-integration",
+  },
+];
+
+const servicesCol2 = [
+  {
+    label: "AI Voice Agent",
+    id: "ai-voice-agent",
+  },
+  {
+    label: "App Development",
+    id: "app-dev",
+  },
+  {
+    label: "Web Development",
+    id: "web-dev",
+  },
+  {
+    label: "Web Design",
+    id: "web-design",
+  },
+  {
+    label: "UI UX Support",
+    id: "ui-ux-support",
+  },
+];
+
+function ServicesField({
+  value,
+  onChange,
+}: {
+  value: string[];
+  onChange: (value: string[]) => void;
+}) {
+  return (
+    <div className="grid grid-cols-2">
+      {[servicesCol1, servicesCol2].map((col, i) => (
+        <div key={i} className="flex flex-col gap-2">
+          {col.map((item) => (
+            <div key={item.id} className="flex gap-2 items-center">
+              <Checkbox
+                id={item.id}
+                value={item.id}
+                checked={value.includes(item.id)}
+                onCheckedChange={(checked) =>
+                  onChange(
+                    checked
+                      ? [...value, item.id]
+                      : value.filter((v) => v !== item.id),
+                  )
+                }
+              />
+              <Label htmlFor={item.id}>{item.label}</Label>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const budgetOptions = [
+  {
+    id: "<1000",
+    label: "Below $1000",
+  },
+  {
+    id: "1000-5000",
+    label: "$1,000-$5,000",
+  },
+  {
+    id: "5000-10000",
+    label: "$5,000-$10,000",
+  },
+  {
+    id: ">10000",
+    label: "Above $10,000",
+  },
+  {
+    id: "not-decided",
+    label: "Not Decided",
+  },
+];
+
+const projectTimeline = [
+  {
+    id: "asap",
+    label: "Immediately / ASAP",
+  },
+  {
+    id: "1-month",
+    label: "Within 1 Month",
+  },
+  {
+    id: "1-3months",
+    label: "1 - 3 Months",
+  },
+  {
+    id: "3-6months",
+    label: "3 - 6 Months",
+  },
+  {
+    id: ">6months",
+    label: "More than 6 Months",
+  },
+];
+
+export function ContactForm() {
   const { toast } = useToast();
   const { executeRecaptcha } = useGoogleReCaptcha();
 
@@ -58,6 +207,8 @@ export function ContactFormContent() {
       fullName: "",
       email: "",
       message: "",
+      phone: "",
+      services: [],
     },
   });
 
@@ -121,7 +272,7 @@ export function ContactFormContent() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-[#0D1B2A] font-semibold text-sm">
-                  Full Name *
+                  Full Name <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -141,7 +292,7 @@ export function ContactFormContent() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-[#0D1B2A] font-semibold text-sm">
-                  Email *
+                  Email <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -158,11 +309,109 @@ export function ContactFormContent() {
 
           <FormField
             control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-[#0D1B2A] font-semibold text-sm">
+                  Phone Number
+                </FormLabel>
+                <FormControl>
+                  <PhoneInput
+                    placeholder="preferably whatsapp number"
+                    defaultCountry="US"
+                    inputComponent={Input}
+                    numberInputProps={{
+                      className:
+                        "border-gray-200 focus:border-[#FF5722] focus:ring-[#FF5722]",
+                    }}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="services"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-[#0D1B2A] font-semibold text-sm">
+                  Services Interested <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <ServicesField
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="budget"
+            render={({ field: { value, onChange } }) => (
+              <FormItem>
+                <FormLabel className="text-[#0D1B2A] font-semibold text-sm">
+                  Approx Project Budget <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    className="grid grid-cols-2"
+                    value={value}
+                    onValueChange={onChange}
+                  >
+                    {budgetOptions.map((item, i) => (
+                      <div key={item.id} className="flex gap-2 items-center">
+                        <RadioGroupItem id={item.id} value={item.id} />
+                        <Label htmlFor={item.id}>{item.label}</Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="timeline"
+            render={({ field: { value, onChange } }) => (
+              <FormItem>
+                <FormLabel className="text-[#0D1B2A] font-semibold text-sm">
+                  Project Timeline <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    className="grid grid-cols-2"
+                    value={value}
+                    onValueChange={onChange}
+                  >
+                    {projectTimeline.map((item, i) => (
+                      <div key={item.id} className="flex gap-2 items-center">
+                        <RadioGroupItem id={item.id} value={item.id} />
+                        <Label htmlFor={item.id}>{item.label}</Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="message"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-[#0D1B2A] font-semibold text-sm">
-                  Message *
+                  Project Detail/Requirement
                 </FormLabel>
                 <FormControl>
                   <Textarea
@@ -176,17 +425,35 @@ export function ContactFormContent() {
             )}
           />
 
-          <button
+          <Button
             type="submit"
             disabled={submitMutation.isPending}
             className="w-full inline-flex items-center justify-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] disabled:opacity-60 text-white font-bold py-4 rounded transition-colors text-sm uppercase tracking-wide"
           >
-            {submitMutation.isPending ? "Sending..." : "Send Message"}
+            {submitMutation.isPending ? "Submitting..." : "Submit"}
             {!submitMutation.isPending && <ArrowRight className="w-4 h-4" />}
-          </button>
+          </Button>
 
           <p className="text-xs text-gray-400 text-center">
-            Protected by reCAPTCHA. We respect your privacy.
+            Protected by reCAPTCHA and the Google{" "}
+            <a
+              href="https://policies.google.com/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-gray-300 transition-colors"
+            >
+              Privacy Policy
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://policies.google.com/terms"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-gray-300 transition-colors"
+            >
+              Terms of Service
+            </a>
+            . We respect your privacy.
           </p>
         </form>
       </Form>
@@ -259,7 +526,7 @@ export default function ContactSection() {
 
           {/* Right: Form */}
           <div className="lg:col-span-3">
-            <ContactFormContent />
+            <ContactForm />
           </div>
         </div>
       </div>

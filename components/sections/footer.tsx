@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Linkedin, Github, Mail } from "lucide-react";
-import { useContactDialog } from "@/components/contact-dialog";
+import Link from "next/link";
 
 const serviceLinks = [
   { label: "AI Product Development", href: "#services" },
@@ -27,7 +27,6 @@ const socialLinks = [
 ];
 
 export default function Footer() {
-  const contactDialog = useContactDialog();
   return (
     <footer className="bg-[#0D1B2A] text-white border-t border-white/10">
       {/* Main Footer */}
@@ -141,12 +140,12 @@ export default function Footer() {
                 <p className="text-white/70">Mon – Fri, 9am – 6pm IST</p>
               </div>
             </div>
-            <button
-              onClick={() => contactDialog?.openDialog()}
+            <Link
+              href={`/contact`}
               className="inline-flex items-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] text-white text-sm font-bold px-5 py-3 rounded transition-colors"
             >
               Send a Message
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -159,6 +158,29 @@ export default function Footer() {
           </p>
           <p className="text-white/40 text-xs uppercase tracking-widest">
             Assisting Human Intelligence
+          </p>
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 -mt-2">
+          <p className="text-white/30 text-xs text-center md:text-left">
+            This site is protected by reCAPTCHA and the Google{" "}
+            <a
+              href="https://policies.google.com/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-white/60 transition-colors"
+            >
+              Privacy Policy
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://policies.google.com/terms"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-white/60 transition-colors"
+            >
+              Terms of Service
+            </a>{" "}
+            apply.
           </p>
         </div>
       </div>

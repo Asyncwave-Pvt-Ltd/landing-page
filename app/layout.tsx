@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import QueryProvider from "@/components/providers/query-provider";
-import { ContactDialogProvider } from "@/components/contact-dialog";
 import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import Navbar from "@/components/sections/navbar";
+import Footer from "@/components/sections/footer";
+import { RecaptchaProvider } from "@/components/recaptcha-provider";
+import { FloatingChatbot } from "@/components/floating-chatbot";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -136,12 +139,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={cn("font-sans", inter.variable)}>
-      <body>
+      <body className="flex min-h-dvh flex-col">
         <QueryProvider>
-          <ContactDialogProvider>
-            {children}
+          <RecaptchaProvider>
+            <Navbar />
+            <div className="flex-1">{children}</div>
+            <Footer />
             <Toaster />
-          </ContactDialogProvider>
+            <FloatingChatbot />
+          </RecaptchaProvider>
         </QueryProvider>
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
         <script

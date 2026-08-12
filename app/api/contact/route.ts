@@ -27,6 +27,10 @@ New Message from Asyncwave Contact Form:
 Name: ${validatedData.fullName}
 Email: ${validatedData.email}
 Message: ${validatedData.message}
+Services: ${validatedData.services.join(", ")}
+Phone: ${validatedData.phone || "N/A"}
+Budget: ${validatedData.budget}
+Timeline: ${validatedData.timeline}
       `.trim(),
     });
 

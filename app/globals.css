@@ -121,3 +121,10 @@
     --font-sans:        var(--font-sans);
   }
 }
+
+/* Hide the reCAPTCHA v3 badge. Google permits this only while the required
+   attribution text + Privacy/Terms links stay visible in the user flow —
+   see the footer and the contact form. */
+.grecaptcha-badge {
+  visibility: hidden;
+}

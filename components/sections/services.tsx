@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useContactDialog } from "../contact-dialog";
+import Link from "next/link";
 
 const services = [
   {
@@ -46,7 +46,6 @@ const services = [
 ];
 
 export default function Services() {
-  const contactDialog = useContactDialog();
   return (
     <section id="services" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -111,12 +110,12 @@ export default function Services() {
                 together.
               </p>
             </div>
-            <Button
+            <Link
               className="mt-8 inline-flex items-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] text-white text-sm font-bold px-6 py-3 rounded transition-colors w-fit"
-              onClick={() => contactDialog?.openDialog()}
+              href={`/contact`}
             >
               Talk to Us <ArrowRight className="w-4 h-4" />
-            </Button>
+            </Link>
           </Card>
         </div>
       </div>

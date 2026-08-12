@@ -3,7 +3,6 @@
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useContactDialog } from "@/components/contact-dialog";
 import Link from "next/link";
 
 const stats = [
@@ -14,7 +13,6 @@ const stats = [
 ];
 
 export default function Hero() {
-  const contactDialog = useContactDialog();
   return (
     <section
       id="hero"
@@ -51,16 +49,16 @@ export default function Hero() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button
-                  onClick={() => contactDialog?.openDialog()}
-                  className="bg-[#FF5722] hover:bg-[#E64A19] text-white font-bold px-8 py-6 rounded transition-colors text-sm uppercase tracking-wide"
+                <Link
+                  href={`/contact`}
+                  className="flex items-center justify-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] text-white font-bold px-8 py-4 rounded transition-colors text-sm uppercase tracking-wide"
                 >
-                  Get Started
+                  Book Free Consultation
                   <ArrowRight className="w-4 h-4" />
-                </Button>
+                </Link>
                 <Link
                   href="/#services"
-                  className="bg-transparent hover:bg-transparent border-2 border-white/30 hover:border-[#FF5722] text-white hover:text-[#FF5722] font-bold px-8 py-3 rounded transition-colors text-sm uppercase tracking-wide"
+                  className="bg-transparent hover:bg-transparent border-2 border-white/30 hover:border-[#FF5722] text-white text-center hover:text-[#FF5722] font-bold px-8 py-3 rounded transition-colors text-sm uppercase tracking-wide"
                 >
                   Explore Services
                   <ChevronRight className="w-4 h-4 inline-block mb-1 ml-2" />

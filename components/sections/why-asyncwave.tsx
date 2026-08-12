@@ -3,7 +3,7 @@
 import { Check, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useContactDialog } from "../contact-dialog";
+import Link from "next/link";
 
 const reasons = [
   "Deep specialization in AI & LLM technologies",
@@ -15,7 +15,6 @@ const reasons = [
 ];
 
 export default function WhyAsyncwave() {
-  const contactDialog = useContactDialog();
   return (
     <section id="why-us" className="py-24 bg-[#F8F9FA]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -96,12 +95,12 @@ export default function WhyAsyncwave() {
               ))}
             </ul>
 
-            <Button
+            <Link
               className="inline-flex items-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] text-white font-bold px-8 py-4 rounded transition-colors text-sm uppercase tracking-wide"
-              onClick={() => contactDialog?.openDialog()}
+              href="/contact"
             >
               Start a Project <ArrowRight className="w-4 h-4" />
-            </Button>
+            </Link>
           </div>
         </div>
       </div>

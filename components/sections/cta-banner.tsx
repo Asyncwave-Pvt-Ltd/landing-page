@@ -1,10 +1,9 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { useContactDialog } from "@/components/contact-dialog";
+import Link from "next/link";
 
 export default function CTABanner() {
-  const contactDialog = useContactDialog();
   return (
     <section className="bg-[#FF5722] py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,12 +18,12 @@ export default function CTABanner() {
               Let&apos;s talk about your project. We respond within 24 hours.
             </p>
           </div>
-          <button
-            onClick={() => contactDialog?.openDialog()}
+          <Link
+            href={`/contact`}
             className="flex-shrink-0 inline-flex items-center gap-2 bg-white hover:bg-gray-100 text-[#FF5722] font-bold px-8 py-4 rounded transition-colors text-sm uppercase tracking-wide"
           >
             Get a Free Quote <ArrowRight className="w-4 h-4" />
-          </button>
+          </Link>
         </div>
       </div>
     </section>

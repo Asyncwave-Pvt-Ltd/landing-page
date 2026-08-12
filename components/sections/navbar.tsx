@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { ChevronDown, Menu, X } from "lucide-react";
 import {
@@ -13,7 +13,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
-import { useContactDialog } from "@/components/contact-dialog";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -22,23 +21,69 @@ const navLinks = [
     href: "/",
     subMenu: [
       { label: "About Us", href: "/#why-us" },
-      { label: "Testimonials", href: "/#testimonials" },
       { label: "FAQ", href: "/#faq" },
     ],
   },
-  { label: "Services", href: "/#services" },
+  {
+    label: "Services",
+    href: "/#services",
+    // subMenu: [
+    //   {
+    //     label: "AI powered Chatbot Development",
+    //     href: "/services/ai-chatbot",
+    //   },
+    //   {
+    //     label: "Productive Analysis and Forecasting",
+    //     href: "/#services",
+    //   },
+    //   {
+    //     label: "Custom machine learning solutions",
+    //     href: "/#services",
+    //   },
+    //   {
+    //     label: "NLP and Text intelligence",
+    //     href: "/#services",
+    //   },
+    //   {
+    //     label: "AI in healthcare",
+    //     href: "/#services",
+    //   },
+    //   {
+    //     label: "AI for ecommerce and marketing",
+    //     href: "/#services",
+    //   },
+    //   {
+    //     label: "AI document processing",
+    //     href: "/#services",
+    //   },
+    //   {
+    //     label: "AI for ed-tech",
+    //     href: "/#services",
+    //   },
+    //   {
+    //     label: "AI for finance and fintech",
+    //     href: "/#services",
+    //   },
+    // ],
+  },
   { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Contact", href: "/contact" },
 ];
 
-const NavLinks = ({ className }: { className?: string }) => {
+const NavLinks = ({
+  className,
+  onNavigate,
+}: {
+  className?: string;
+  onNavigate?: () => void;
+}) => {
   return (
     <nav
       className={cn("flex flex-col md:flex-row items-center gap-8", className)}
     >
       {navLinks.map((link) =>
         link.subMenu ? (
-          <DropdownMenu key={link.href}>
+          <DropdownMenu key={link.label}>
             <DropdownMenuTrigger asChild>
               <Link
                 href={link.href}
@@ -51,10 +96,11 @@ const NavLinks = ({ className }: { className?: string }) => {
             <DropdownMenuContent className="p-0 rounded-none border-y-2 border-y-[#FF5722] ring-0">
               {link.subMenu.map((subLink) => (
                 <DropdownMenuItem
-                  key={subLink.href}
+                  key={subLink.label}
+                  asChild
                   className="w-full rounded-none px-4 py-2 outline-none"
                 >
-                  <Link href={`${link.href}${subLink.href}`} className="w-full">
+                  <Link href={subLink.href} onClick={onNavigate}>
                     {subLink.label}
                   </Link>
                 </DropdownMenuItem>
@@ -65,6 +111,7 @@ const NavLinks = ({ className }: { className?: string }) => {
           <Link
             href={link.href}
             key={link.href}
+            onClick={onNavigate}
             className="text-white md:text-gray-900"
           >
             {link.label}
@@ -77,8 +124,8 @@ const NavLinks = ({ className }: { className?: string }) => {
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
-  const contactDialog = useContactDialog();
 
   const isMobile = useBreakpoint({
     sm: true,
@@ -91,19 +138,48 @@ export default function Navbar() {
     }
   }, [isMobile]);
 
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  // restart the 2s idle countdown; never hides while at the top of the page
+  const scheduleHide = useCallback(() => {
+    clearTimeout(timer.current);
+    if (window.scrollY > 20)
+      timer.current = setTimeout(() => setHidden(true), 2000);
   }, []);
+
+  useEffect(() => {
+    let lastY = window.scrollY;
+
+    const fn = () => {
+      const y = window.scrollY;
+      const atTop = y <= 20;
+
+      setScrolled(!atTop);
+      setHidden(!atTop && y > lastY);
+      lastY = y;
+
+      scheduleHide();
+    };
+
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", fn);
+      clearTimeout(timer.current);
+    };
+  }, [scheduleHide]);
 
   return (
     <header
       className={cn(
         "fixed top-0 left-0 w-full transition-all bg-gray-100 z-50 py-4",
-        scrolled && "p-4 shadow-xl",
+        scrolled && "shadow-xl",
+        hidden && !open && "-translate-y-full",
         open && "bg-primary h-full",
       )}
+      onPointerEnter={() => clearTimeout(timer.current)}
+      onPointerLeave={scheduleHide}
+      onFocus={() => clearTimeout(timer.current)}
+      onBlur={scheduleHide}
     >
       <div className="relative flex items-center justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
@@ -112,25 +188,33 @@ export default function Navbar() {
             open && "flex-col",
           )}
         >
-          <Link href="/" className="flex items-center gap-2.5">
+          <Link
+            href="/"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2.5"
+          >
             <Image
               src={`/logo_${open ? "dark" : "color"}.png`}
               alt="Asyncwave"
               width={100}
               height={100}
-              className="rounded-md"
+              className="rounded-md w-16 md:w-20"
             />
           </Link>
-          <NavLinks className={cn("hidden md:flex", open && "flex gap-4")} />
-          <Button
-            onClick={() => contactDialog?.openDialog()}
+          <NavLinks
+            className={cn("hidden md:flex", open && "flex gap-4")}
+            onNavigate={() => setOpen(false)}
+          />
+          <Link
+            href="/contact"
+            onClick={() => setOpen(false)}
             className={cn(
-              "bg-[#FF5722] hover:bg-[#E64A19] font-bold px-8 py-3 text-white rounded-full",
+              "bg-[#FF5722] hover:bg-[#E64A19] font-bold px-8 py-1 text-white rounded-full uppercase",
               open && "bg-white text-[#FF5722]",
             )}
           >
-            GET A QUOTE
-          </Button>
+            Contact
+          </Link>
         </div>
         <Button
           variant="ghost"
