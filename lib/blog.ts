@@ -1,22 +1,12 @@
-// Strapi v5 REST API integration for blog posts.
+// Sanity integration for blog posts.
 //
-// Required Strapi content type (API ID: "post", collection):
-//   slug        — UID, attached to title
-//   title       — Short text (required)
-//   description — Long text (required)
-//   tags        — JSON (string[]) or comma-separated Text
-//   keywords    — JSON (string[]) or comma-separated Text
-//   body        — Rich Text (Blocks)
-//   coverImage  — Media (single image)
-//   author      — Component with `name` (Short text) field
+// Content type lives in the studio repo (asyncwave-cms-test/schemaTypes/post.ts):
+//   slug, title, description, publishedAt, tags[], keywords[],
+//   coverImage (image + alt), author { name }, body (Portable Text)
 
-const STRAPI_URL = (process.env.STRAPI_URL ?? "http://localhost:1337").replace(/\/$/, "");
-const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN ?? "";
-
-const API_HEADERS: HeadersInit = {
-  "Content-Type": "application/json",
-  ...(STRAPI_TOKEN ? { Authorization: `Bearer ${STRAPI_TOKEN}` } : {}),
-};
+import { toHTML, escapeHTML, type PortableTextHtmlComponents } from "@portabletext/to-html";
+import type { TypedObject } from "@portabletext/types";
+import { sanityClient } from "@/lib/sanity";
 
 // ─── Public BlogPost shape (consumed by app/blog/**) ─────────────────────────
 
@@ -34,147 +24,63 @@ export interface BlogPost {
   body?: string;
 }
 
-// ─── Strapi v5 raw types ──────────────────────────────────────────────────────
+// ─── Raw query result ─────────────────────────────────────────────────────────
 
-type InlineNode =
-  | {
-      type: "text";
-      text: string;
-      bold?: boolean;
-      italic?: boolean;
-      underline?: boolean;
-      strikethrough?: boolean;
-      code?: boolean;
-    }
-  | { type: "link"; url: string; children: InlineNode[] };
-
-type BlockNode =
-  | { type: "paragraph"; children: InlineNode[] }
-  | { type: "heading"; level: 1 | 2 | 3 | 4 | 5 | 6; children: InlineNode[] }
-  | {
-      type: "list";
-      format: "ordered" | "unordered";
-      children: { type: "list-item"; children: InlineNode[] }[];
-    }
-  | { type: "quote"; children: InlineNode[] }
-  | { type: "code"; code: string; language?: string }
-  | { type: "image"; image: { url: string; alternativeText?: string } };
-
-interface StrapiPost {
-  id: number;
-  documentId?: string;
-  slug: string;
+export interface SanityPost {
+  slug: string | null;
   title: string;
-  description?: string;
+  description?: string | null;
   publishedAt: string;
-  updatedAt?: string;
-  tags?: string[] | string | null;
-  keywords?: string[] | string | null;
-  body?: BlockNode[] | null;
-  coverImage?: { url: string; alternativeText?: string } | null;
-  author?: { name: string; avatar?: { url: string } | null } | null;
+  updatedAt?: string | null;
+  tags?: string[] | null;
+  keywords?: string[] | null;
+  plainText?: string | null;
+  coverImage?: { url: string | null; alt: string | null } | null;
+  author?: { name?: string | null } | null;
+  body?: TypedObject[] | null;
 }
 
-// ─── Blocks → HTML ───────────────────────────────────────────────────────────
+// ─── Portable Text → HTML ────────────────────────────────────────────────────
 
-function esc(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
-function inlinesToHtml(nodes: InlineNode[]): string {
-  return nodes
-    .map((n) => {
-      if (n.type === "link") {
-        return `<a href="${esc(n.url)}" rel="noopener noreferrer" target="_blank">${inlinesToHtml(n.children)}</a>`;
-      }
-      let t = esc(n.text);
-      if (n.code) return `<code>${t}</code>`;
-      if (n.bold) t = `<strong>${t}</strong>`;
-      if (n.italic) t = `<em>${t}</em>`;
-      if (n.underline) t = `<u>${t}</u>`;
-      if (n.strikethrough) t = `<s>${t}</s>`;
-      return t;
-    })
-    .join("");
-}
-
-function blocksToHtml(blocks: BlockNode[]): string {
-  return blocks
-    .map((block) => {
-      switch (block.type) {
-        case "paragraph":
-          return `<p>${inlinesToHtml(block.children)}</p>`;
-        case "heading":
-          return `<h${block.level}>${inlinesToHtml(block.children)}</h${block.level}>`;
-        case "list": {
-          const tag = block.format === "ordered" ? "ol" : "ul";
-          const items = block.children
-            .map((li) => `<li>${inlinesToHtml(li.children)}</li>`)
-            .join("");
-          return `<${tag}>${items}</${tag}>`;
-        }
-        case "quote":
-          return `<blockquote>${inlinesToHtml(block.children)}</blockquote>`;
-        case "code":
-          return `<pre><code>${esc(block.code)}</code></pre>`;
-        case "image": {
-          const src = block.image.url.startsWith("http")
-            ? block.image.url
-            : `${STRAPI_URL}${block.image.url}`;
-          return `<img src="${esc(src)}" alt="${esc(block.image.alternativeText ?? "")}" loading="lazy" />`;
-        }
-        default:
-          return "";
-      }
-    })
-    .join("\n");
-}
+const ptComponents: Partial<PortableTextHtmlComponents> = {
+  types: {
+    // `url` is resolved in the GROQ projection below
+    image: ({ value }) =>
+      value?.url
+        ? `<img src="${escapeHTML(value.url)}" alt="${escapeHTML(value.alt ?? "")}" loading="lazy" />`
+        : "",
+    code: ({ value }) => `<pre><code>${escapeHTML(value?.code ?? "")}</code></pre>`,
+  },
+  marks: {
+    link: ({ children, value }) =>
+      `<a href="${escapeHTML(value?.href ?? "")}" rel="noopener noreferrer" target="_blank">${children}</a>`,
+  },
+};
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
 
-function calcReadingTime(html: string): string {
-  const words = html
-    .replace(/<[^>]+>/g, " ")
-    .split(/\s+/)
-    .filter(Boolean).length;
+function calcReadingTime(text: string): string {
+  const words = text.split(/\s+/).filter(Boolean).length;
   return `${Math.max(1, Math.round(words / 200))} min read`;
-}
-
-function toStringArray(val: string[] | string | null | undefined): string[] {
-  if (!val) return [];
-  if (Array.isArray(val)) return val.map((s) => s.trim()).filter(Boolean);
-  return val.split(",").map((s) => s.trim()).filter(Boolean);
-}
-
-function resolveMediaUrl(url: string): string {
-  return url.startsWith("http") ? url : `${STRAPI_URL}${url}`;
 }
 
 // ─── Mapper ───────────────────────────────────────────────────────────────────
 
-function mapPost(raw: StrapiPost): BlogPost {
-  const html = raw.body ? blocksToHtml(raw.body) : "";
+export function mapPost(raw: SanityPost): BlogPost {
   return {
-    slug: raw.slug,
+    slug: raw.slug ?? "",
     title: raw.title,
     description: raw.description ?? "",
     publishedAt: raw.publishedAt,
-    updatedAt: raw.updatedAt,
-    readingTime: calcReadingTime(html),
-    tags: toStringArray(raw.tags),
-    keywords: toStringArray(raw.keywords),
-    coverImage: raw.coverImage
-      ? {
-          url: resolveMediaUrl(raw.coverImage.url),
-          alt: raw.coverImage.alternativeText ?? raw.title,
-        }
+    updatedAt: raw.updatedAt ?? undefined,
+    readingTime: calcReadingTime(raw.plainText ?? ""),
+    tags: raw.tags ?? [],
+    keywords: raw.keywords ?? [],
+    coverImage: raw.coverImage?.url
+      ? { url: raw.coverImage.url, alt: raw.coverImage.alt ?? raw.title }
       : undefined,
-    author: raw.author ? { name: raw.author.name } : undefined,
-    body: html || undefined,
+    author: raw.author?.name ? { name: raw.author.name } : undefined,
+    body: raw.body?.length ? toHTML(raw.body, { components: ptComponents }) : undefined,
   };
 }
 
@@ -183,65 +89,56 @@ function mapPost(raw: StrapiPost): BlogPost {
 const CACHE_TAG = "blog-posts";
 const REVALIDATE_SECONDS = 3600;
 
-function basePopulate(): URLSearchParams {
-  const p = new URLSearchParams();
-  p.set("populate[coverImage][fields][0]", "url");
-  p.set("populate[coverImage][fields][1]", "alternativeText");
-  p.set("populate[author][fields][0]", "name");
-  return p;
-}
-
-async function strapiGet<T>(
-  endpoint: string,
-  params: URLSearchParams
-): Promise<T | null> {
-  const url = `${STRAPI_URL}/api/${endpoint}?${params}`;
+async function query<T>(groq: string, params: Record<string, unknown> = {}): Promise<T | null> {
   try {
-    const res = await fetch(url, {
-      headers: API_HEADERS,
+    return await sanityClient.fetch<T>(groq, params, {
       next: { tags: [CACHE_TAG], revalidate: REVALIDATE_SECONDS },
     });
-    if (!res.ok) {
-      console.error(`[Strapi] ${endpoint}: ${res.status} ${res.statusText}`);
-      return null;
-    }
-    return res.json() as Promise<T>;
   } catch (err) {
-    console.error(`[Strapi] fetch error [${endpoint}]:`, err);
+    console.error("[Sanity] query failed:", err);
     return null;
   }
 }
 
+// `pt::text(body)` gives the plain text without shipping the whole body to the list page.
+const CARD_FIELDS = `
+  "slug": slug.current,
+  title,
+  description,
+  publishedAt,
+  "updatedAt": _updatedAt,
+  tags,
+  keywords,
+  "plainText": pt::text(body),
+  coverImage{"url": asset->url, alt},
+  author
+`;
+
 // ─── Public API ───────────────────────────────────────────────────────────────
 
 export async function getAllPosts(): Promise<BlogPost[]> {
-  const params = basePopulate();
-  params.set("sort[0]", "publishedAt:desc");
-  params.set("status", "published");
-  params.set("pagination[pageSize]", "100");
-
-  const json = await strapiGet<{ data: StrapiPost[] }>("posts", params);
-  return (json?.data ?? []).map(mapPost);
+  const posts = await query<SanityPost[]>(
+    `*[_type == "post" && defined(slug.current) && defined(publishedAt) && publishedAt <= now()]
+     | order(publishedAt desc)[0...100]{${CARD_FIELDS}}`
+  );
+  return (posts ?? []).map(mapPost);
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-  const params = basePopulate();
-  params.set("filters[slug][$eq]", slug);
-  params.set("status", "published");
-
-  const json = await strapiGet<{ data: StrapiPost[] }>("posts", params);
-  const first = json?.data?.[0];
-  return first ? mapPost(first) : null;
+  const post = await query<SanityPost | null>(
+    `*[_type == "post" && slug.current == $slug && defined(publishedAt) && publishedAt <= now()][0]{
+      ${CARD_FIELDS},
+      body[]{..., _type == "image" => {"url": asset->url, alt}}
+    }`,
+    { slug }
+  );
+  return post ? mapPost(post) : null;
 }
 
 export async function getAllSlugs(): Promise<string[]> {
-  const params = new URLSearchParams({
-    "fields[0]": "slug",
-    "sort[0]": "publishedAt:desc",
-    "status": "published",
-    "pagination[pageSize]": "1000",
-  });
-
-  const json = await strapiGet<{ data: StrapiPost[] }>("posts", params);
-  return (json?.data ?? []).map((p) => p.slug).filter(Boolean);
+  const slugs = await query<string[]>(
+    `*[_type == "post" && defined(slug.current) && defined(publishedAt) && publishedAt <= now()]
+     | order(publishedAt desc)[0...1000].slug.current`
+  );
+  return (slugs ?? []).filter(Boolean);
 }

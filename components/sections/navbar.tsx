@@ -20,7 +20,7 @@ const navLinks = [
     label: "Company",
     href: "/",
     subMenu: [
-      { label: "About Us", href: "/#why-us" },
+      { label: "About Us", href: "/about-us" },
       { label: "FAQ", href: "/#faq" },
     ],
   },
@@ -70,6 +70,58 @@ const navLinks = [
   { label: "Contact", href: "/contact" },
 ];
 
+type NavLink = (typeof navLinks)[number] & {
+  subMenu?: { label: string; href: string }[];
+};
+
+const NavDropdown = ({
+  link,
+  onNavigate,
+}: {
+  link: NavLink;
+  onNavigate?: () => void;
+}) => {
+  const [open, setOpen] = useState(false);
+  // hover opens on mouse/pen; touch falls through to Radix's click handling
+  const hover = (next: boolean) => (e: React.PointerEvent) => {
+    if (e.pointerType !== "touch") setOpen(next);
+  };
+
+  return (
+    <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          onPointerEnter={hover(true)}
+          onPointerLeave={hover(false)}
+          className="text-white md:text-gray-900 outline-none min-w-max"
+        >
+          {link.label}
+          <ChevronDown className="w-4 h-4 inline-block ml-1" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        sideOffset={0}
+        onPointerEnter={hover(true)}
+        onPointerLeave={hover(false)}
+        className="p-0 rounded-none border-y-2 border-y-[#FF5722] ring-0"
+      >
+        {link.subMenu?.map((subLink) => (
+          <DropdownMenuItem
+            key={subLink.label}
+            asChild
+            className="w-full rounded-none px-4 py-2 outline-none"
+          >
+            <Link href={subLink.href} onClick={onNavigate}>
+              {subLink.label}
+            </Link>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
 const NavLinks = ({
   className,
   onNavigate,
@@ -83,30 +135,7 @@ const NavLinks = ({
     >
       {navLinks.map((link) =>
         link.subMenu ? (
-          <DropdownMenu key={link.label}>
-            <DropdownMenuTrigger asChild>
-              <Link
-                href={link.href}
-                className="text-white md:text-gray-900 outline-none min-w-max"
-              >
-                {link.label}
-                <ChevronDown className="w-4 h-4 inline-block ml-1" />
-              </Link>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="p-0 rounded-none border-y-2 border-y-[#FF5722] ring-0">
-              {link.subMenu.map((subLink) => (
-                <DropdownMenuItem
-                  key={subLink.label}
-                  asChild
-                  className="w-full rounded-none px-4 py-2 outline-none"
-                >
-                  <Link href={subLink.href} onClick={onNavigate}>
-                    {subLink.label}
-                  </Link>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <NavDropdown key={link.label} link={link} onNavigate={onNavigate} />
         ) : (
           <Link
             href={link.href}

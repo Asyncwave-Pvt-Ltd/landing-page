@@ -428,7 +428,7 @@ export function ContactForm() {
           <Button
             type="submit"
             disabled={submitMutation.isPending}
-            className="w-full inline-flex items-center justify-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] disabled:opacity-60 text-white font-bold py-4 rounded transition-colors text-sm uppercase tracking-wide"
+            className="w-full md:w-48 md:mx-auto flex items-center justify-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] disabled:opacity-60 text-white font-bold py-4 rounded transition-colors text-sm uppercase tracking-wide"
           >
             {submitMutation.isPending ? "Submitting..." : "Submit"}
             {!submitMutation.isPending && <ArrowRight className="w-4 h-4" />}

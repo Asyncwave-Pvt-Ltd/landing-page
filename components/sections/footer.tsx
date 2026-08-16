@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Linkedin, Github, Mail } from "lucide-react";
+import { Linkedin, Github, Mail, Instagram } from "lucide-react";
 import Link from "next/link";
 
 const serviceLinks = [
@@ -14,15 +14,28 @@ const serviceLinks = [
 
 const companyLinks = [
   { label: "About Us", href: "#why-us" },
-  { label: "Testimonials", href: "#testimonials" },
+  // { label: "Testimonials", href: "#testimonials" },
   { label: "Blogs", href: "/blog" },
   { label: "FAQ", href: "#faq" },
-  { label: "Contact", href: "#contact" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const socialLinks = [
-  { icon: Linkedin, href: "https://linkedin.com/company/asyncwave-pvt-ltd", label: "LinkedIn" },
-  { icon: Github, href: "https://github.com/asyncwave-pvt-ltd", label: "GitHub" },
+  {
+    icon: Instagram,
+    href: "https://www.instagram.com/asyncwave_pvt_ltd",
+    label: "LinkedIn",
+  },
+  {
+    icon: Linkedin,
+    href: "https://linkedin.com/company/asyncwave-pvt-ltd",
+    label: "LinkedIn",
+  },
+  {
+    icon: Github,
+    href: "https://github.com/asyncwave-pvt-ltd",
+    label: "GitHub",
+  },
   { icon: Mail, href: "mailto:contact@asyncwave.in", label: "Email" },
 ];
 
@@ -34,10 +47,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-1">
-            <a
-              href="#hero"
-              className="flex items-center gap-2.5 mb-5"
-            >
+            <a href="#hero" className="flex items-center gap-2.5 mb-5">
               <Image
                 src="/logo_color.png"
                 alt="Asyncwave — AI Development Company India"
@@ -141,7 +151,7 @@ export default function Footer() {
               </div>
             </div>
             <Link
-              href={`/contact`}
+              href={`https://wa.me/917340417987?text=Hello%20Asyncwave!%20I%20would%20like%20to%20inquire%20about%20your%20AI%20development%20services`}
               className="inline-flex items-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] text-white text-sm font-bold px-5 py-3 rounded transition-colors"
             >
               Send a Message
