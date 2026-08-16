@@ -2,29 +2,17 @@
 
 import Image from "next/image";
 import { Linkedin, Github, Mail, Instagram } from "lucide-react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
-const serviceLinks = [
-  { label: "AI Product Development", href: "#services" },
-  { label: "AI Chatbot Development", href: "#services" },
-  { label: "Specialized AI Solutions", href: "#services" },
-  { label: "Agentic Workflows", href: "#services" },
-  { label: "Web & Mobile Apps", href: "#services" },
-];
-
-const companyLinks = [
-  { label: "About Us", href: "#why-us" },
-  // { label: "Testimonials", href: "#testimonials" },
-  { label: "Blogs", href: "/blog" },
-  { label: "FAQ", href: "#faq" },
-  { label: "Contact", href: "/contact" },
-];
+const WHATSAPP_URL =
+  "https://wa.me/917340417987?text=Hello%20Asyncwave!%20I%20would%20like%20to%20inquire%20about%20your%20AI%20development%20services";
 
 const socialLinks = [
   {
     icon: Instagram,
     href: "https://www.instagram.com/asyncwave_pvt_ltd",
-    label: "LinkedIn",
+    label: "Instagram",
   },
   {
     icon: Linkedin,
@@ -39,7 +27,28 @@ const socialLinks = [
   { icon: Mail, href: "mailto:contact@asyncwave.in", label: "Email" },
 ];
 
+const policyLink = (href: string) => (chunks: React.ReactNode) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="underline hover:text-white/60 transition-colors"
+  >
+    {chunks}
+  </a>
+);
+
 export default function Footer() {
+  const t = useTranslations("footer");
+  const serviceLinks = t.raw("serviceLinks") as string[];
+
+  const companyLinks = [
+    { label: t("companyLinks.about"), href: "/#why-us" },
+    { label: t("companyLinks.blog"), href: "/blog" },
+    { label: t("companyLinks.faq"), href: "/#faq" },
+    { label: t("companyLinks.contact"), href: "/contact" },
+  ];
+
   return (
     <footer className="bg-[#0D1B2A] text-white border-t border-white/10">
       {/* Main Footer */}
@@ -47,20 +56,18 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-1">
-            <a href="#hero" className="flex items-center gap-2.5 mb-5">
+            <Link href="/#hero" className="flex items-center gap-2.5 mb-5">
               <Image
                 src="/logo_color.png"
-                alt="Asyncwave — AI Development Company India"
+                alt={t("logoAlt")}
                 width={36}
                 height={36}
                 className="rounded-md"
               />
               <span className="text-xl font-bold tracking-wide">Asyncwave</span>
-            </a>
+            </Link>
             <p className="text-white/50 text-sm leading-relaxed mb-6">
-              Assisting Human Intelligence. We build AI-powered products,
-              chatbots, and automated workflows that amplify what your team can
-              do.
+              {t("tagline")}
             </p>
             <div className="flex gap-3">
               {socialLinks.map((social) => {
@@ -84,17 +91,17 @@ export default function Footer() {
           {/* Services Column */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-widest text-[#FF5722] mb-5">
-              Services
+              {t("servicesHeading")}
             </h4>
             <ul className="space-y-3">
-              {serviceLinks.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
+              {serviceLinks.map((label) => (
+                <li key={label}>
+                  <Link
+                    href="/#services"
                     className="text-white/60 hover:text-white text-sm transition-colors"
                   >
-                    {link.label}
-                  </a>
+                    {label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -103,17 +110,17 @@ export default function Footer() {
           {/* Company Column */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-widest text-[#FF5722] mb-5">
-              Company
+              {t("companyHeading")}
             </h4>
             <ul className="space-y-3">
               {companyLinks.map((link) => (
                 <li key={link.label}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-white/60 hover:text-white text-sm transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -122,11 +129,11 @@ export default function Footer() {
           {/* Contact Column */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-widest text-[#FF5722] mb-5">
-              Get in Touch
+              {t("contactHeading")}
             </h4>
             <div className="space-y-4 text-sm mb-6">
               <div>
-                <p className="text-white/40 text-xs mb-1">Email</p>
+                <p className="text-white/40 text-xs mb-1">{t("emailLabel")}</p>
                 <a
                   href="mailto:contact@asyncwave.in"
                   className="text-white/70 hover:text-white transition-colors"
@@ -135,9 +142,11 @@ export default function Footer() {
                 </a>
               </div>
               <div>
-                <p className="text-white/40 text-xs mb-1">Whatsapp</p>
+                <p className="text-white/40 text-xs mb-1">
+                  {t("whatsappLabel")}
+                </p>
                 <a
-                  href="https://wa.me/917340417987?text=Hello%20Asyncwave!%20I%20would%20like%20to%20inquire%20about%20your%20AI%20development%20services."
+                  href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white/70 hover:text-white transition-colors"
@@ -146,16 +155,18 @@ export default function Footer() {
                 </a>
               </div>
               <div>
-                <p className="text-white/40 text-xs mb-1">Working Hours</p>
-                <p className="text-white/70">Mon – Fri, 9am – 6pm IST</p>
+                <p className="text-white/40 text-xs mb-1">{t("hoursLabel")}</p>
+                <p className="text-white/70">{t("hoursValue")}</p>
               </div>
             </div>
-            <Link
-              href={`https://wa.me/917340417987?text=Hello%20Asyncwave!%20I%20would%20like%20to%20inquire%20about%20your%20AI%20development%20services`}
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] text-white text-sm font-bold px-5 py-3 rounded transition-colors"
             >
-              Send a Message
-            </Link>
+              {t("sendMessage")}
+            </a>
           </div>
         </div>
       </div>
@@ -164,33 +175,18 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-white/40 text-sm">
-            © 2025 Asyncwave. All rights reserved.
+            {t("copyright", { year: new Date().getFullYear() })}
           </p>
           <p className="text-white/40 text-xs uppercase tracking-widest">
-            Assisting Human Intelligence
+            {t("motto")}
           </p>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 -mt-2">
           <p className="text-white/30 text-xs text-center md:text-left">
-            This site is protected by reCAPTCHA and the Google{" "}
-            <a
-              href="https://policies.google.com/privacy"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-white/60 transition-colors"
-            >
-              Privacy Policy
-            </a>{" "}
-            and{" "}
-            <a
-              href="https://policies.google.com/terms"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-white/60 transition-colors"
-            >
-              Terms of Service
-            </a>{" "}
-            apply.
+            {t.rich("recaptchaNotice", {
+              privacy: policyLink("https://policies.google.com/privacy"),
+              terms: policyLink("https://policies.google.com/terms"),
+            })}
           </p>
         </div>
       </div>

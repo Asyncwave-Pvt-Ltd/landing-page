@@ -2,12 +2,13 @@
 
 import "react-phone-number-input/style.css";
 
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import { Mail, MessageSquare, MapPin, ArrowRight, Check } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { ArrowRight } from "lucide-react";
 
 import {
   Form,
@@ -27,95 +28,54 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 
-const contactInfo = [
-  {
-    icon: Mail,
-    label: "Email Us",
-    value: "hello@asyncwave.com",
-    href: "mailto:hello@asyncwave.com",
-  },
-  {
-    icon: MessageSquare,
-    label: "Whatsapp",
-    value: "Within 24 hours",
-    href: "#",
-  },
-  {
-    icon: MapPin,
-    label: "Location",
-    value: "Remote-first, worldwide",
-    href: "#",
-  },
-];
-
-const whyUs = [
-  "Free discovery call, no commitment",
-  "Clear pricing, no surprises",
-  "Small team, direct communication",
-  "Ongoing support after launch",
-];
-
+// ids double as the i18n keys under `form.serviceOptions` / `form.budgetOptions`
+// / `form.timelineOptions`, and are what gets submitted.
 const servicesCol1 = [
-  {
-    label: "AI Chatbot",
-    id: "ai-chatbot",
-  },
-  {
-    label: "Custom AI Agents",
-    id: "custom-ai-agents",
-  },
-  {
-    label: "AI Workflow Automation",
-    id: "ai-workflow-automation",
-  },
-  {
-    label: "Whatsapp AI automation",
-    id: "whatsapp-ai-automation",
-  },
-  {
-    label: "Generative AI solutions",
-    id: "gen-ai-solutions",
-  },
-  {
-    label: "Customer Support Automation",
-    id: "customer-support-automation",
-  },
-  {
-    label: "Sales & Lead Generation Automation",
-    id: "sales-lead-automation",
-  },
-  {
-    label: "AI Data Analysis & Reporting",
-    id: "data-analysis-reporting",
-  },
-  {
-    label: "AI Integration with existing software",
-    id: "ai-integration",
-  },
+  "ai-chatbot",
+  "custom-ai-agents",
+  "ai-workflow-automation",
+  "whatsapp-ai-automation",
+  "gen-ai-solutions",
+  "customer-support-automation",
+  "sales-lead-automation",
+  "data-analysis-reporting",
+  "ai-integration",
 ];
 
 const servicesCol2 = [
-  {
-    label: "AI Voice Agent",
-    id: "ai-voice-agent",
-  },
-  {
-    label: "App Development",
-    id: "app-dev",
-  },
-  {
-    label: "Web Development",
-    id: "web-dev",
-  },
-  {
-    label: "Web Design",
-    id: "web-design",
-  },
-  {
-    label: "UI UX Support",
-    id: "ui-ux-support",
-  },
+  "ai-voice-agent",
+  "app-dev",
+  "web-dev",
+  "web-design",
+  "ui-ux-support",
 ];
+
+const budgetOptions = [
+  "<1000",
+  "1000-5000",
+  "5000-10000",
+  ">10000",
+  "not-decided",
+] as const;
+
+const timelineOptions = [
+  "asap",
+  "1-month",
+  "1-3months",
+  "3-6months",
+  ">6months",
+] as const;
+
+const policyLink = (href: string) => (chunks: React.ReactNode) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="underline hover:text-gray-300 transition-colors"
+  >
+    {chunks}
+  </a>
+);
 
 function ServicesField({
   value,
@@ -124,25 +84,25 @@ function ServicesField({
   value: string[];
   onChange: (value: string[]) => void;
 }) {
+  const t = useTranslations("form.serviceOptions");
+
   return (
     <div className="grid grid-cols-2">
       {[servicesCol1, servicesCol2].map((col, i) => (
         <div key={i} className="flex flex-col gap-2">
-          {col.map((item) => (
-            <div key={item.id} className="flex gap-2 items-center">
+          {col.map((id) => (
+            <div key={id} className="flex gap-2 items-center">
               <Checkbox
-                id={item.id}
-                value={item.id}
-                checked={value.includes(item.id)}
+                id={id}
+                value={id}
+                checked={value.includes(id)}
                 onCheckedChange={(checked) =>
                   onChange(
-                    checked
-                      ? [...value, item.id]
-                      : value.filter((v) => v !== item.id),
+                    checked ? [...value, id] : value.filter((v) => v !== id),
                   )
                 }
               />
-              <Label htmlFor={item.id}>{item.label}</Label>
+              <Label htmlFor={id}>{t(id)}</Label>
             </div>
           ))}
         </div>
@@ -151,53 +111,8 @@ function ServicesField({
   );
 }
 
-const budgetOptions = [
-  {
-    id: "<1000",
-    label: "Below $1000",
-  },
-  {
-    id: "1000-5000",
-    label: "$1,000-$5,000",
-  },
-  {
-    id: "5000-10000",
-    label: "$5,000-$10,000",
-  },
-  {
-    id: ">10000",
-    label: "Above $10,000",
-  },
-  {
-    id: "not-decided",
-    label: "Not Decided",
-  },
-];
-
-const projectTimeline = [
-  {
-    id: "asap",
-    label: "Immediately / ASAP",
-  },
-  {
-    id: "1-month",
-    label: "Within 1 Month",
-  },
-  {
-    id: "1-3months",
-    label: "1 - 3 Months",
-  },
-  {
-    id: "3-6months",
-    label: "3 - 6 Months",
-  },
-  {
-    id: ">6months",
-    label: "More than 6 Months",
-  },
-];
-
 export function ContactForm() {
+  const t = useTranslations("form");
   const { toast } = useToast();
   const { executeRecaptcha } = useGoogleReCaptcha();
 
@@ -227,23 +142,21 @@ export function ContactForm() {
         body: JSON.stringify(data),
       });
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.message || "Something went wrong");
+        throw new Error(await res.text().catch(() => ""));
       }
       return res.json();
     },
     onSuccess: () => {
       toast({
-        title: "Message sent!",
-        description:
-          "Thank you for reaching out. We'll get back to you within 24 hours.",
+        title: t("toast.successTitle"),
+        description: t("toast.successBody"),
       });
       form.reset();
     },
-    onError: (error: Error) => {
+    onError: () => {
       toast({
-        title: "Failed to send",
-        description: error.message || "Please try again later.",
+        title: t("toast.errorTitle"),
+        description: t("toast.errorBody"),
         variant: "destructive",
       });
     },
@@ -253,8 +166,8 @@ export function ContactForm() {
     const token = await handleReCaptchaVerify();
     if (!token) {
       toast({
-        title: "Verification failed",
-        description: "reCAPTCHA verification failed. Please try again.",
+        title: t("toast.recaptchaTitle"),
+        description: t("toast.recaptchaBody"),
         variant: "destructive",
       });
       return;
@@ -272,11 +185,11 @@ export function ContactForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-[#0D1B2A] font-semibold text-sm">
-                  Full Name <span className="text-red-500">*</span>
+                  {t("fullName")} <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="John Doe"
+                    placeholder={t("fullNamePlaceholder")}
                     className="border-gray-200 focus:border-[#FF5722] focus:ring-[#FF5722]"
                     {...field}
                   />
@@ -292,12 +205,12 @@ export function ContactForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-[#0D1B2A] font-semibold text-sm">
-                  Email <span className="text-red-500">*</span>
+                  {t("email")} <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
                   <Input
                     type="email"
-                    placeholder="john@company.com"
+                    placeholder={t("emailPlaceholder")}
                     className="border-gray-200 focus:border-[#FF5722] focus:ring-[#FF5722]"
                     {...field}
                   />
@@ -313,11 +226,11 @@ export function ContactForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-[#0D1B2A] font-semibold text-sm">
-                  Phone Number
+                  {t("phone")}
                 </FormLabel>
                 <FormControl>
                   <PhoneInput
-                    placeholder="preferably whatsapp number"
+                    placeholder={t("phonePlaceholder")}
                     defaultCountry="US"
                     inputComponent={Input}
                     numberInputProps={{
@@ -338,7 +251,7 @@ export function ContactForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-[#0D1B2A] font-semibold text-sm">
-                  Services Interested <span className="text-red-500">*</span>
+                  {t("services")} <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
                   <ServicesField
@@ -357,7 +270,7 @@ export function ContactForm() {
             render={({ field: { value, onChange } }) => (
               <FormItem>
                 <FormLabel className="text-[#0D1B2A] font-semibold text-sm">
-                  Approx Project Budget <span className="text-red-500">*</span>
+                  {t("budget")} <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
                   <RadioGroup
@@ -365,10 +278,10 @@ export function ContactForm() {
                     value={value}
                     onValueChange={onChange}
                   >
-                    {budgetOptions.map((item, i) => (
-                      <div key={item.id} className="flex gap-2 items-center">
-                        <RadioGroupItem id={item.id} value={item.id} />
-                        <Label htmlFor={item.id}>{item.label}</Label>
+                    {budgetOptions.map((id) => (
+                      <div key={id} className="flex gap-2 items-center">
+                        <RadioGroupItem id={id} value={id} />
+                        <Label htmlFor={id}>{t(`budgetOptions.${id}`)}</Label>
                       </div>
                     ))}
                   </RadioGroup>
@@ -384,7 +297,7 @@ export function ContactForm() {
             render={({ field: { value, onChange } }) => (
               <FormItem>
                 <FormLabel className="text-[#0D1B2A] font-semibold text-sm">
-                  Project Timeline <span className="text-red-500">*</span>
+                  {t("timeline")} <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
                   <RadioGroup
@@ -392,10 +305,10 @@ export function ContactForm() {
                     value={value}
                     onValueChange={onChange}
                   >
-                    {projectTimeline.map((item, i) => (
-                      <div key={item.id} className="flex gap-2 items-center">
-                        <RadioGroupItem id={item.id} value={item.id} />
-                        <Label htmlFor={item.id}>{item.label}</Label>
+                    {timelineOptions.map((id) => (
+                      <div key={id} className="flex gap-2 items-center">
+                        <RadioGroupItem id={id} value={id} />
+                        <Label htmlFor={id}>{t(`timelineOptions.${id}`)}</Label>
                       </div>
                     ))}
                   </RadioGroup>
@@ -411,11 +324,11 @@ export function ContactForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-[#0D1B2A] font-semibold text-sm">
-                  Project Detail/Requirement
+                  {t("message")}
                 </FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Tell us about your project, idea, or challenge..."
+                    placeholder={t("messagePlaceholder")}
                     className="min-h-[120px] border-gray-200 focus:border-[#FF5722] focus:ring-[#FF5722]"
                     {...field}
                   />
@@ -430,106 +343,18 @@ export function ContactForm() {
             disabled={submitMutation.isPending}
             className="w-full md:w-48 md:mx-auto flex items-center justify-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] disabled:opacity-60 text-white font-bold py-4 rounded transition-colors text-sm uppercase tracking-wide"
           >
-            {submitMutation.isPending ? "Submitting..." : "Submit"}
+            {submitMutation.isPending ? t("submitting") : t("submit")}
             {!submitMutation.isPending && <ArrowRight className="w-4 h-4" />}
           </Button>
 
           <p className="text-xs text-gray-400 text-center">
-            Protected by reCAPTCHA and the Google{" "}
-            <a
-              href="https://policies.google.com/privacy"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-gray-300 transition-colors"
-            >
-              Privacy Policy
-            </a>{" "}
-            and{" "}
-            <a
-              href="https://policies.google.com/terms"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-gray-300 transition-colors"
-            >
-              Terms of Service
-            </a>
-            . We respect your privacy.
+            {t.rich("recaptchaNotice", {
+              privacy: policyLink("https://policies.google.com/privacy"),
+              terms: policyLink("https://policies.google.com/terms"),
+            })}
           </p>
         </form>
       </Form>
     </div>
-  );
-}
-
-export default function ContactSection() {
-  return (
-    <section id="contact" className="py-24 bg-[#0D1B2A]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <span className="inline-flex items-center gap-2 text-[#FF5722] text-xs font-bold uppercase tracking-widest mb-4">
-            <span className="w-6 h-[2px] bg-[#FF5722]" />
-            Get in Touch
-            <span className="w-6 h-[2px] bg-[#FF5722]" />
-          </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-            Let&apos;s Build Something Great
-          </h2>
-          <p className="text-white/50 max-w-xl mx-auto">
-            Have a project in mind or just want to explore what&apos;s possible?
-            We&apos;d love to hear from you.
-          </p>
-        </div>
-
-        <div className="grid lg:grid-cols-5 gap-12 items-start">
-          {/* Left Info Panel */}
-          <div className="lg:col-span-2 space-y-8">
-            <div className="space-y-4">
-              {contactInfo.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    className="flex items-start gap-4 group"
-                  >
-                    <div className="w-12 h-12 rounded-lg bg-[#FF5722] flex items-center justify-center flex-shrink-0">
-                      <Icon className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-white/50 text-xs font-medium mb-0.5">
-                        {item.label}
-                      </p>
-                      <p className="text-white font-semibold text-sm">
-                        {item.value}
-                      </p>
-                    </div>
-                  </a>
-                );
-              })}
-            </div>
-
-            <div className="bg-[#0F2231] rounded-lg p-6 border border-white/10">
-              <h4 className="text-white font-bold mb-4">Why Asyncwave?</h4>
-              <ul className="space-y-3">
-                {whyUs.map((item) => (
-                  <li key={item} className="flex items-center gap-3">
-                    <span className="w-5 h-5 rounded-full bg-[#FF5722] flex items-center justify-center flex-shrink-0">
-                      <Check className="w-3 h-3 text-white" strokeWidth={3} />
-                    </span>
-                    <span className="text-white/70 text-sm">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Right: Form */}
-          <div className="lg:col-span-3">
-            <ContactForm />
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }

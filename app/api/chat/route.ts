@@ -32,7 +32,7 @@ const MODEL = process.env.DEEPSEEK_MODEL ?? "deepseek-chat";
 
 export async function POST(request: NextRequest) {
   try {
-    const { recaptchaToken, messages } = chatRequestSchema.parse(
+    const { recaptchaToken, locale, messages } = chatRequestSchema.parse(
       await request.json(),
     );
 
@@ -45,11 +45,19 @@ export async function POST(request: NextRequest) {
     }
 
     // System prompt stays first and byte-identical so DeepSeek's automatic
-    // context caching keeps hitting on the knowledge base.
+    // context caching keeps hitting on the knowledge base; the language
+    // directive goes in a second system message so the cached prefix survives.
     const response = await client.chat.completions.create({
       model: MODEL,
       max_tokens: 1024,
-      messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        {
+          role: "system",
+          content: `Reply in the language with the IETF tag "${locale}", regardless of the language the question is asked in.`,
+        },
+        ...messages,
+      ],
     });
 
     const reply = response.choices[0]?.message.content?.trim() ?? "";

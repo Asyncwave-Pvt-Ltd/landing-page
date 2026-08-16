@@ -11,6 +11,7 @@ import {
   FormProvider,
   useFormContext,
 } from "react-hook-form";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 
@@ -147,7 +148,11 @@ const FormMessage = React.forwardRef<
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...props }, ref) => {
   const { error, formMessageId } = useFormField();
-  const body = error ? String(error?.message) : children;
+  const t = useTranslations("form");
+  const raw = error ? String(error?.message) : children;
+  // Zod carries message *keys* (see lib/schema.ts) so validation text is localized
+  // here; anything that isn't a known key is rendered as-is.
+  const body = typeof raw === "string" && t.has(raw) ? t(raw) : raw;
 
   if (!body) return null;
 

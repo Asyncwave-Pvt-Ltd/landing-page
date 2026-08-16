@@ -1,0 +1,338 @@
+{
+  "nav": {
+    "home": "Home",
+    "company": "Company",
+    "aboutUs": "About Us",
+    "faq": "FAQ",
+    "services": "Services",
+    "blog": "Blog",
+    "contact": "Contact",
+    "language": "Language",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "hero": {
+    "badge": "AI-First Software Studio",
+    "titleLine1": "Elevate Your Business",
+    "titleLine2Prefix": "with",
+    "titleHighlight": "AI Excellence",
+    "subtitle": "We build AI-powered products, intelligent chatbots, and automated workflows that amplify what your team can do — from concept to production.",
+    "ctaPrimary": "Book Free Consultation",
+    "ctaSecondary": "Explore Services",
+    "imageAlt": "Asyncwave team building AI products",
+    "stats": [
+      { "value": "20+", "label": "Projects Delivered" },
+      { "value": "10+", "label": "Happy Clients" },
+      { "value": "2+", "label": "Years Experience" },
+      { "value": "100%", "label": "Client Satisfaction" }
+    ]
+  },
+  "services": {
+    "eyebrow": "What We Do",
+    "title": "Exclusive AI Development Services",
+    "subtitle": "We combine deep AI expertise with solid engineering to deliver products that truly work.",
+    "items": [
+      {
+        "title": "AI Product Development",
+        "description": "From vision to production — we architect and build AI-powered products end-to-end, handling everything from model integration to deployment."
+      },
+      {
+        "title": "AI Chatbot Development Services",
+        "description": "Intelligent chatbots that understand context, resolve queries instantly, and provide 24/7 support across every channel your customers use."
+      },
+      {
+        "title": "Custom AI Solutions & LLM Integration",
+        "description": "Custom AI experiences — personal tutors, assistants, recommendation engines — tailored to your exact domain and business requirements."
+      },
+      {
+        "title": "Agentic Workflow Automation",
+        "description": "Automate complex multi-step processes: report generation, customer management, sales pipelines — let agents do the heavy lifting."
+      },
+      {
+        "title": "Web & Mobile Development",
+        "description": "High-performance web and mobile apps with cloud deployment, scalability, and ongoing support built in from the ground up."
+      }
+    ],
+    "ctaCard": {
+      "title": "Have a custom AI project in mind?",
+      "description": "Tell us your challenge — we'll figure out the best solution together.",
+      "button": "Talk to Us"
+    }
+  },
+  "why": {
+    "eyebrow": "Why Choose Us",
+    "titleLine1": "What Makes Asyncwave",
+    "titleHighlight": "Different",
+    "subtitle": "We're a focused AI studio that takes your project seriously. Small enough to care deeply, experienced enough to deliver reliably.",
+    "badgeValue": "2+",
+    "badgeLabel": "Years in AI",
+    "imageAlt": "Asyncwave at work",
+    "reasons": [
+      "Deep specialization in AI & LLM technologies",
+      "End-to-end delivery from concept to production",
+      "Rapid prototyping with no compromise on quality",
+      "Transparent communication throughout the project",
+      "Ongoing support and continuous optimization",
+      "Proven results across diverse industries"
+    ],
+    "cta": "Start a Project"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "titleLine1": "Frequently Asked",
+    "titleHighlight": "Questions",
+    "subtitle": "Have a question that isn't answered here? Reach out via the contact form and we'll get back to you within 24 hours.",
+    "items": [
+      {
+        "q": "What types of AI projects do you work on?",
+        "a": "We work on a wide range of AI projects including LLM-powered products, AI chatbots, agentic workflow automation, specialized AI solutions (tutors, assistants, recommenders), and web/mobile apps with AI integrations. If it involves AI, we can help."
+      },
+      {
+        "q": "How long does a typical project take?",
+        "a": "Project timelines vary based on complexity. A basic AI chatbot integration can take 2–4 weeks. A custom AI product typically takes 6–12 weeks. We work in short iteration cycles so you see progress quickly and can provide feedback throughout."
+      },
+      {
+        "q": "Do you provide ongoing support after launch?",
+        "a": "Yes — we offer ongoing support, monitoring, and optimization after launch. AI systems benefit from continuous improvement, and we stay engaged to make sure your product keeps delivering value as your needs evolve."
+      },
+      {
+        "q": "Which AI models and technologies do you work with?",
+        "a": "We work with OpenAI (GPT-4o, o1), Anthropic (Claude), Google (Gemini), and open-source models. On the infra side: AWS, GCP, Azure, LangChain, LlamaIndex, and more. We recommend the best stack for your specific use case."
+      },
+      {
+        "q": "How do you handle data privacy and security?",
+        "a": "We take data security seriously. We implement best practices including encryption at rest and in transit, secure API key management, and comply with relevant data protection standards. We'll discuss your specific requirements before starting."
+      },
+      {
+        "q": "What information do you need to provide a quote?",
+        "a": "A brief description of your project, your goals, any existing systems it needs to integrate with, and your approximate timeline and budget. Fill in our contact form and we'll get back to you within 24 hours with initial thoughts."
+      }
+    ]
+  },
+  "ctaBanner": {
+    "titleLine1": "Ready to Elevate Your Business",
+    "titleLine2": "with AI?",
+    "subtitle": "Let's talk about your project. We respond within 24 hours.",
+    "button": "Get a Free Quote"
+  },
+  "footer": {
+    "tagline": "Assisting Human Intelligence. We build AI-powered products, chatbots, and automated workflows that amplify what your team can do.",
+    "servicesHeading": "Services",
+    "companyHeading": "Company",
+    "contactHeading": "Get in Touch",
+    "serviceLinks": [
+      "AI Product Development",
+      "AI Chatbot Development",
+      "Specialized AI Solutions",
+      "Agentic Workflows",
+      "Web & Mobile Apps"
+    ],
+    "companyLinks": {
+      "about": "About Us",
+      "blog": "Blogs",
+      "faq": "FAQ",
+      "contact": "Contact"
+    },
+    "emailLabel": "Email",
+    "whatsappLabel": "Whatsapp",
+    "hoursLabel": "Working Hours",
+    "hoursValue": "Mon – Fri, 9am – 6pm IST",
+    "sendMessage": "Send a Message",
+    "copyright": "© {year} Asyncwave. All rights reserved.",
+    "motto": "Assisting Human Intelligence",
+    "recaptchaNotice": "This site is protected by reCAPTCHA and the Google <privacy>Privacy Policy</privacy> and <terms>Terms of Service</terms> apply.",
+    "logoAlt": "Asyncwave — AI Development Company India"
+  },
+  "about": {
+    "eyebrow": "About Asyncwave",
+    "titlePrefix": "We build technology that actually",
+    "titleHighlight": "works for your business",
+    "subtitle": "Asyncwave is an AI development company. We help startups, SMEs, and growing businesses build AI agents, automation systems, and software solutions that solve real operational problems.",
+    "howEyebrow": "How We Work",
+    "howTitlePrefix": "Understand the problem first,",
+    "howTitleHighlight": "then build the technology",
+    "howSubtitle": "Six steps from an idea or manual process to a reliable, scalable solution running in production.",
+    "stepLabel": "Step {number}",
+    "steps": [
+      {
+        "title": "Understand the scope",
+        "description": "We start by understanding the project scope and clarifying requirements — what the problem actually is, before anyone writes code."
+      },
+      {
+        "title": "Free planning session",
+        "description": "We hold a free meeting session where we present the plan layout and the budget details, so you know the shape and the cost up front."
+      },
+      {
+        "title": "Build a POC",
+        "description": "We move to a proof of concept first. This lets you see your idea in action, on a smaller scale, before committing to the full build."
+      },
+      {
+        "title": "Full-scale build",
+        "description": "Only after the POC succeeds in initial trials and shows potential in testing do we start building the full-fledged, scalable solution."
+      },
+      {
+        "title": "Monitored testing",
+        "description": "We hand over the built solution and run it under monitored conditions for final testing before release."
+      },
+      {
+        "title": "Release and improve",
+        "description": "We release the product to real users and keep improving it continuously as your business changes."
+      }
+    ],
+    "getStarted": "Lets get started",
+    "missionEyebrow": "Our Mission",
+    "missionTitle": "Real value addition, No bluff",
+    "missionSubtitle": "Our mission is to add real value to your business. We do quality work, and with quality idea.",
+    "beliefs": [
+      {
+        "title": "Honest Communication",
+        "description": "Straight answers about scope, timelines, and limitations, including when the answer is no."
+      },
+      {
+        "title": "Quality Work",
+        "description": "Built to run in production, not to pass a demo. Tested, documented, maintainable."
+      },
+      {
+        "title": "Transparency",
+        "description": "You always know what we're working on, where things stand, and what comes next."
+      },
+      {
+        "title": "Continuous Improvement",
+        "description": "We stay engaged after launch and keep refining as your business changes."
+      }
+    ],
+    "closingPrefix": "Our goal is not just to build software. It's to build technology that",
+    "closingHighlight": "actually works",
+    "closingSuffix": "for your business."
+  },
+  "blog": {
+    "eyebrow": "Insights",
+    "title": "AI Development Blog",
+    "subtitle": "Practical guides on AI chatbots, agentic workflows, LLM integration, and building AI products for Indian businesses.",
+    "emptyTitle": "Articles coming soon.",
+    "emptyBodyBefore": "Check back shortly or",
+    "emptyLink": "contact us",
+    "emptyBodyAfter": "with a topic you'd like us to cover.",
+    "read": "Read"
+  },
+  "post": {
+    "back": "Back to Blog",
+    "by": "By {name}",
+    "loading": "Content loading from CMS…",
+    "ctaTitle": "Ready to Build with AI?",
+    "ctaSubtitle": "Let's discuss your AI project. We respond within 24 hours.",
+    "ctaButton": "Start a Conversation"
+  },
+  "contact": {
+    "title": "Get Instant Quote",
+    "subtitle": "Fill in the form and we'll be in touch within 24 hours."
+  },
+  "form": {
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "John Doe",
+    "email": "Email",
+    "emailPlaceholder": "john@company.com",
+    "phone": "Phone Number",
+    "phonePlaceholder": "preferably whatsapp number",
+    "services": "Services Interested",
+    "budget": "Approx Project Budget",
+    "timeline": "Project Timeline",
+    "message": "Project Detail/Requirement",
+    "messagePlaceholder": "Tell us about your project, idea, or challenge...",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "recaptchaNotice": "Protected by reCAPTCHA and the Google <privacy>Privacy Policy</privacy> and <terms>Terms of Service</terms>. We respect your privacy.",
+    "serviceOptions": {
+      "ai-chatbot": "AI Chatbot",
+      "custom-ai-agents": "Custom AI Agents",
+      "ai-workflow-automation": "AI Workflow Automation",
+      "whatsapp-ai-automation": "Whatsapp AI automation",
+      "gen-ai-solutions": "Generative AI solutions",
+      "customer-support-automation": "Customer Support Automation",
+      "sales-lead-automation": "Sales & Lead Generation Automation",
+      "data-analysis-reporting": "AI Data Analysis & Reporting",
+      "ai-integration": "AI Integration with existing software",
+      "ai-voice-agent": "AI Voice Agent",
+      "app-dev": "App Development",
+      "web-dev": "Web Development",
+      "web-design": "Web Design",
+      "ui-ux-support": "UI UX Support"
+    },
+    "budgetOptions": {
+      "<1000": "Below $1000",
+      "1000-5000": "$1,000-$5,000",
+      "5000-10000": "$5,000-$10,000",
+      ">10000": "Above $10,000",
+      "not-decided": "Not Decided"
+    },
+    "timelineOptions": {
+      "asap": "Immediately / ASAP",
+      "1-month": "Within 1 Month",
+      "1-3months": "1 - 3 Months",
+      "3-6months": "3 - 6 Months",
+      ">6months": "More than 6 Months"
+    },
+    "validation": {
+      "fullNameRequired": "Full name is required",
+      "emailInvalid": "Invalid email address",
+      "emailRequired": "Email is required",
+      "messageRequired": "Message is required",
+      "phoneInvalid": "Invalid phone number",
+      "servicesRequired": "This field is mandatory",
+      "budgetRequired": "Please select a budget range",
+      "timelineRequired": "Please select a timeline"
+    },
+    "toast": {
+      "successTitle": "Message sent!",
+      "successBody": "Thank you for reaching out. We'll get back to you within 24 hours.",
+      "errorTitle": "Failed to send",
+      "errorBody": "Please try again later.",
+      "recaptchaTitle": "Verification failed",
+      "recaptchaBody": "reCAPTCHA verification failed. Please try again."
+    }
+  },
+  "chatbot": {
+    "openChat": "Open chat",
+    "close": "Close",
+    "send": "Send",
+    "assistant": "Asyncwave Assistant",
+    "status": "Online · replies instantly",
+    "greeting": "Hi — tell me what you want to automate and I'll point you to the closest project we've shipped.",
+    "inputPlaceholder": "Type your message…",
+    "dockPlaceholder": "Ask our bot which of these fits your use case…",
+    "ask": "Ask",
+    "error": "Something went wrong on our side. Please try again.",
+    "chips": ["Customer support", "Sales / lead qual", "Internal ops"]
+  },
+  "metadata": {
+    "home": {
+      "title": "AI Development Company India | Asyncwave",
+      "description": "Asyncwave builds AI-powered products, intelligent chatbots, agentic workflows, and web & mobile apps for businesses in India. From concept to production — we ship.",
+      "ogDescription": "Asyncwave builds AI-powered products, intelligent chatbots, agentic workflows, and web & mobile apps. From concept to production — we ship.",
+      "twitterDescription": "Chatbots, agentic workflows, and custom AI solutions built in India. From concept to production.",
+      "keywords": "AI development company India, AI chatbot development India, agentic workflow automation, LLM integration services, hire AI developers India, custom AI solutions India, AI product development, generative AI consulting India, OpenAI GPT-4 integration, AI automation agency India, AI startup India, RAG pipeline development, Claude API integration, LangChain developers India",
+      "ogImageAlt": "Asyncwave — AI Development Company India"
+    },
+    "about": {
+      "title": "About Asyncwave — AI & Software Development Company",
+      "description": "Asyncwave is an AI and software development company helping startups, SMEs, and growing businesses turn complex ideas into practical digital solutions.",
+      "ogDescription": "We combine AI, automation, software engineering, and product thinking to help businesses move from an idea or manual process to a reliable, scalable solution.",
+      "keywords": "about Asyncwave, AI development company India, AI automation company, custom software development India, AI agents development"
+    },
+    "blog": {
+      "title": "AI Development Blog — Insights & Guides | Asyncwave",
+      "description": "Practical guides on AI chatbot development, agentic workflow automation, LLM integration, and building AI products in India. By the Asyncwave team.",
+      "ogTitle": "AI Development Blog | Asyncwave",
+      "ogDescription": "Practical guides on AI chatbots, agentic workflows, and building AI products in India.",
+      "keywords": "AI development blog India, AI chatbot guide, agentic workflow tutorial, LLM integration guide, AI product development insights"
+    },
+    "contact": {
+      "title": "Contact Asyncwave — Get a Free AI Project Quote",
+      "description": "Tell us about your AI or software project. We reply within 24 hours with initial thoughts, scope, and pricing.",
+      "keywords": "contact Asyncwave, AI project quote, hire AI developers India"
+    },
+    "post": {
+      "titleSuffix": "{title} | Asyncwave Blog"
+    }
+  }
+}

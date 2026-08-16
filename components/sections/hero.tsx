@@ -1,18 +1,14 @@
 "use client";
 
 import { ArrowRight, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import Link from "next/link";
-
-const stats = [
-  { value: "20+", label: "Projects Delivered" },
-  { value: "10+", label: "Happy Clients" },
-  { value: "2+", label: "Years Experience" },
-  { value: "100%", label: "Client Satisfaction" },
-];
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 export default function Hero() {
+  const t = useTranslations("hero");
+  const stats = t.raw("stats") as { value: string; label: string }[];
+
   return (
     <section
       id="hero"
@@ -32,35 +28,34 @@ export default function Hero() {
               <div className="inline-flex items-center gap-2 mb-6">
                 <span className="w-8 h-[2px] bg-[#FF5722]" />
                 <span className="text-[#FF5722] text-xs font-bold uppercase tracking-widest">
-                  AI-First Software Studio
+                  {t("badge")}
                 </span>
               </div>
 
               <h1 className="text-4xl md:text-5xl lg:text-[3.25rem] font-extrabold text-white leading-tight mb-6">
-                Elevate Your Business
+                {t("titleLine1")}
                 <br />
-                with <span className="text-[#FF5722]"> AI Excellence</span>
+                {t("titleLine2Prefix")}{" "}
+                <span className="text-[#FF5722]">{t("titleHighlight")}</span>
               </h1>
 
               <p className="text-white/70 text-lg leading-relaxed mb-10 max-w-lg">
-                We build AI-powered products, intelligent chatbots, and
-                automated workflows that amplify what your team can do — from
-                concept to production.
+                {t("subtitle")}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
-                  href={`/contact`}
+                  href="/contact"
                   className="flex items-center justify-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] text-white font-bold px-8 py-4 rounded transition-colors text-sm uppercase tracking-wide"
                 >
-                  Book Free Consultation
+                  {t("ctaPrimary")}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
                   href="/#services"
                   className="bg-transparent hover:bg-transparent border-2 border-white/30 hover:border-[#FF5722] text-white text-center hover:text-[#FF5722] font-bold px-8 py-3 rounded transition-colors text-sm uppercase tracking-wide"
                 >
-                  Explore Services
+                  {t("ctaSecondary")}
                   <ChevronRight className="w-4 h-4 inline-block mb-1 ml-2" />
                 </Link>
               </div>
@@ -70,7 +65,7 @@ export default function Hero() {
               <div className="w-full max-w-md aspect-square rounded-2xl bg-white/5 border border-white/10 overflow-clip">
                 <Image
                   src="/hero.jpeg"
-                  alt="Hero Image"
+                  alt={t("imageAlt")}
                   width={400}
                   height={400}
                   className="w-full h-full object-cover"

@@ -1,42 +1,56 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import Navbar from "@/components/sections/navbar";
-import Footer from "@/components/sections/footer";
 import { getPostBySlug, getAllSlugs } from "@/lib/blog";
 import { ArrowLeft, Clock, Tag } from "lucide-react";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+import { alternates } from "@/i18n/seo";
+import { localeHreflang, routing, type Locale } from "@/i18n/routing";
 
 interface Props {
-  params: { slug: string };
+  params: { locale: string; slug: string };
 }
 
 export async function generateStaticParams() {
   const slugs = await getAllSlugs();
-  return slugs.map((slug) => ({ slug }));
+  return routing.locales.flatMap((locale) =>
+    slugs.map((slug) => ({ locale, slug })),
+  );
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
   if (!post) return {};
 
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: "metadata.post",
+  });
+  const path = `/blog/${post.slug}`;
+
   return {
-    title: `${post.title} | Asyncwave Blog`,
+    title: t("titleSuffix", { title: post.title }),
     description: post.description,
     keywords: post.keywords,
-    alternates: {
-      canonical: `https://asyncwave.in/blog/${post.slug}`,
-    },
+    alternates: alternates(path, params.locale),
     openGraph: {
       title: post.title,
       description: post.description,
-      url: `https://asyncwave.in/blog/${post.slug}`,
+      url: alternates(path, params.locale).canonical,
       siteName: "Asyncwave",
       type: "article",
       publishedTime: post.publishedAt,
       modifiedTime: post.updatedAt ?? post.publishedAt,
       images: post.coverImage
         ? [{ url: post.coverImage.url, alt: post.coverImage.alt }]
-        : [{ url: "https://asyncwave.in/og-image.png", width: 1200, height: 630, alt: post.title }],
+        : [
+            {
+              url: "https://asyncwave.in/og-image.png",
+              width: 1200,
+              height: 630,
+              alt: post.title,
+            },
+          ],
     },
     twitter: {
       card: "summary_large_image",
@@ -47,8 +61,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params }: Props) {
+  setRequestLocale(params.locale);
   const post = await getPostBySlug(params.slug);
   if (!post) notFound();
+
+  const t = await getTranslations({ locale: params.locale, namespace: "post" });
+  const dateLocale = localeHreflang[params.locale as Locale];
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -73,7 +91,7 @@ export default async function BlogPostPage({ params }: Props) {
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://asyncwave.in/blog/${post.slug}`,
+      "@id": alternates(`/blog/${post.slug}`, params.locale).canonical,
     },
     ...(post.coverImage && { image: post.coverImage.url }),
   };
@@ -84,7 +102,6 @@ export default async function BlogPostPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
-      <Navbar />
       <main className="min-h-screen bg-white pt-24">
         {/* Article header */}
         <header className="bg-[#F8F9FA] border-b border-gray-100 py-14 px-4">
@@ -94,7 +111,7 @@ export default async function BlogPostPage({ params }: Props) {
               className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-[#FF5722] transition-colors mb-6"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              Back to Blog
+              {t("back")}
             </Link>
 
             <div className="flex flex-wrap gap-2 mb-4">
@@ -118,7 +135,7 @@ export default async function BlogPostPage({ params }: Props) {
 
             <div className="flex items-center gap-4 text-sm text-gray-400">
               <span>
-                {new Date(post.publishedAt).toLocaleDateString("en-IN", {
+                {new Date(post.publishedAt).toLocaleDateString(dateLocale, {
                   day: "numeric",
                   month: "long",
                   year: "numeric",
@@ -132,7 +149,7 @@ export default async function BlogPostPage({ params }: Props) {
               {post.author && (
                 <>
                   <span>·</span>
-                  <span>By {post.author.name}</span>
+                  <span>{t("by", { name: post.author.name })}</span>
                 </>
               )}
             </div>
@@ -147,9 +164,7 @@ export default async function BlogPostPage({ params }: Props) {
               dangerouslySetInnerHTML={{ __html: post.body }}
             />
           ) : (
-            <p className="text-gray-400 text-center py-16">
-              Content loading from CMS…
-            </p>
+            <p className="text-gray-400 text-center py-16">{t("loading")}</p>
           )}
         </article>
 
@@ -157,21 +172,18 @@ export default async function BlogPostPage({ params }: Props) {
         <section className="bg-[#0D1B2A] py-16 px-4">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-4">
-              Ready to Build with AI?
+              {t("ctaTitle")}
             </h2>
-            <p className="text-white/60 mb-8">
-              Let&apos;s discuss your AI project. We respond within 24 hours.
-            </p>
+            <p className="text-white/60 mb-8">{t("ctaSubtitle")}</p>
             <Link
-              href="/#contact"
+              href="/contact"
               className="inline-flex items-center gap-2 bg-[#FF5722] hover:bg-[#E64A19] text-white font-bold px-8 py-4 rounded transition-colors text-sm uppercase tracking-wide"
             >
-              Start a Conversation
+              {t("ctaButton")}
             </Link>
           </div>
         </section>
       </main>
-      <Footer />
     </>
   );
 }

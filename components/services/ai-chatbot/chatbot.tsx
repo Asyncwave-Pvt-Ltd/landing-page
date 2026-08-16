@@ -11,12 +11,7 @@ import {
 import { ArrowUp, Bot, MessageCircle, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-
-const chips = [
-  "Customer support",
-  "Sales / lead qual",
-  "Internal ops",
-];
+import { useLocale, useTranslations } from "next-intl";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -26,6 +21,10 @@ type Message = { role: "user" | "assistant"; content: string };
  * `box` null and the panel falls back to its default centred geometry.
  */
 export function Chatbot({ floating = false }: { floating?: boolean }) {
+  const t = useTranslations("chatbot");
+  const locale = useLocale();
+  const chips = t.raw("chips") as string[];
+
   // Viewport box of the trigger, captured on click so the panel can grow out of it.
   // ponytail: not re-measured on resize — Radix locks scroll while open, and a
   // resize mid-conversation is rare enough to not warrant a listener.
@@ -63,25 +62,20 @@ export function Chatbot({ floating = false }: { floating?: boolean }) {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ recaptchaToken, messages: next }),
+        body: JSON.stringify({ recaptchaToken, locale, messages: next }),
       });
       const data = await res.json();
       setMessages([
         ...next,
         {
           role: "assistant",
-          content: res.ok
-            ? data.reply
-            : "Something went wrong on our side. Please try again.",
+          content: res.ok ? data.reply : t("error"),
         },
       ]);
     } catch {
       setMessages([
         ...next,
-        {
-          role: "assistant",
-          content: "Something went wrong on our side. Please try again.",
-        },
+        { role: "assistant", content: t("error") },
       ]);
     } finally {
       setPending(false);
@@ -94,7 +88,7 @@ export function Chatbot({ floating = false }: { floating?: boolean }) {
         /* Corner bubble — site-wide entry point */
         <DialogTrigger asChild>
           <Button
-            aria-label="Open chat"
+            aria-label={t("openChat")}
             className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#FF5722] p-0 text-white shadow-[0_10px_30px_rgba(12,17,22,.28)] transition-[opacity,transform] duration-200 hover:scale-105 hover:bg-[#FF5722] data-[state=open]:pointer-events-none data-[state=open]:opacity-0"
           >
             <MessageCircle className="size-6" />
@@ -119,10 +113,10 @@ export function Chatbot({ floating = false }: { floating?: boolean }) {
               <Bot className="size-5" />
             </span>
             <span className="flex-1 truncate text-[15.5px] text-[#8b949c]">
-              Ask our bot which of these fits your use case…
+              {t("dockPlaceholder")}
             </span>
             <span className="rounded-full bg-[#0c1116] px-[18px] py-[9px] text-[14px] font-semibold text-white">
-              Ask
+              {t("ask")}
             </span>
           </Button>
         </DialogTrigger>
@@ -152,28 +146,23 @@ export function Chatbot({ floating = false }: { floating?: boolean }) {
           </div>
           <div className="flex-1">
             <DialogTitle className="text-[16px] font-extrabold tracking-[-0.01em]">
-              Asyncwave Assistant
+              {t("assistant")}
             </DialogTitle>
             <div className="mt-[3px] flex items-center gap-[6px] font-mono text-[11.5px] text-[#8b949c]">
               <span className="h-[6px] w-[6px] rounded-full bg-[oklch(0.72_0.16_150)]" />
-              Online · replies instantly
+              {t("status")}
             </div>
           </div>
           <DialogClose className="flex h-8 w-8 items-center justify-center rounded-[10px] border border-[#e6e9ec] text-[#5c6670] transition-colors hover:bg-[#f8fafb]">
             <X className="h-[15px] w-[15px]" />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{t("close")}</span>
           </DialogClose>
         </div>
 
         {/* Conversation */}
         <div className="flex flex-1 flex-col gap-[14px] overflow-y-auto bg-[#f8fafb] p-[22px]">
-          <div className="self-center font-mono text-[11px] tracking-[0.06em] text-[#a3abb2]">
-            TODAY 14:20
-          </div>
-
           <div className="max-w-[78%] self-start rounded-[16px_16px_16px_5px] border border-[#e9edf0] bg-white px-[17px] py-[14px] text-[15px] leading-[1.55]">
-            Hi — tell me what you want to automate and I&apos;ll point you to
-            the closest project we&apos;ve shipped.
+            {t("greeting")}
           </div>
 
           {messages.length === 0 && (
@@ -235,7 +224,7 @@ export function Chatbot({ floating = false }: { floating?: boolean }) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             maxLength={1000}
-            placeholder="Type your message…"
+            placeholder={t("inputPlaceholder")}
             className="flex-1 rounded-full border border-[#e6e9ec] bg-[#fbfcfd] px-[18px] py-[14px] text-[15px] outline-none placeholder:text-[#a3abb2] focus:border-[oklch(0.88_0.05_245)]"
           />
           <button
@@ -244,7 +233,7 @@ export function Chatbot({ floating = false }: { floating?: boolean }) {
             className="flex h-[46px] w-[46px] flex-none items-center justify-center rounded-full bg-[#FF5722] text-white transition-opacity hover:opacity-90 disabled:opacity-40"
           >
             <ArrowUp className="h-[19px] w-[19px]" />
-            <span className="sr-only">Send</span>
+            <span className="sr-only">{t("send")}</span>
           </button>
         </form>
       </DialogContent>

@@ -4,15 +4,28 @@ import { z } from "zod";
 // an API route imports this file.
 import { isPossiblePhoneNumber } from 'libphonenumber-js'
 
-// Client-side schema (no recaptchaToken — used for form validation)
+// Client-side schema (no recaptchaToken — used for form validation).
+// Messages are i18n keys under the `form` namespace — FormMessage resolves them.
 export const contactFormSchema = z.object({
-  fullName: z.string().min(1, "Full name is required"),
-  email: z.string().email("Invalid email address").min(1, "Email is required"),
-  message: z.string().min(1, "Message is required"),
-  phone: z.string().optional().refine(data => data ? isPossiblePhoneNumber(data) : true),
-  services: z.array(z.string()).min(1, "This field is mandatory"),
-  budget: z.enum(["<1000", "1000-5000", "5000-10000", ">10000", "not-decided"]),
-  timeline: z.enum(["asap", "1-month", "1-3months", "3-6months", ">6months"])
+  fullName: z.string().min(1, "validation.fullNameRequired"),
+  email: z
+    .string()
+    .min(1, "validation.emailRequired")
+    .email("validation.emailInvalid"),
+  message: z.string().min(1, "validation.messageRequired"),
+  phone: z
+    .string()
+    .optional()
+    .refine((data) => (data ? isPossiblePhoneNumber(data) : true), {
+      message: "validation.phoneInvalid",
+    }),
+  services: z.array(z.string()).min(1, "validation.servicesRequired"),
+  budget: z.enum(["<1000", "1000-5000", "5000-10000", ">10000", "not-decided"], {
+    errorMap: () => ({ message: "validation.budgetRequired" }),
+  }),
+  timeline: z.enum(["asap", "1-month", "1-3months", "3-6months", ">6months"], {
+    errorMap: () => ({ message: "validation.timelineRequired" }),
+  }),
 });
 
 // Server-side schema (includes recaptchaToken — used in API route)
@@ -27,6 +40,8 @@ export type ContactFormRequest = z.infer<typeof contactFormRequestSchema>;
 // from running up an API bill.
 export const chatRequestSchema = z.object({
   recaptchaToken: z.string().min(1, "reCAPTCHA token is required"),
+  // BCP-47 tag of the page the visitor is on; the bot answers in that language.
+  locale: z.string().min(2).max(10).default("en"),
   messages: z
     .array(
       z.object({

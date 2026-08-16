@@ -9,68 +9,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
+import { LanguageSwitcher } from "@/components/sections/language-switcher";
 
-const navLinks = [
-  { label: "Home", href: "/" },
-  {
-    label: "Company",
-    href: "/",
-    subMenu: [
-      { label: "About Us", href: "/about-us" },
-      { label: "FAQ", href: "/#faq" },
-    ],
-  },
-  {
-    label: "Services",
-    href: "/#services",
-    // subMenu: [
-    //   {
-    //     label: "AI powered Chatbot Development",
-    //     href: "/services/ai-chatbot",
-    //   },
-    //   {
-    //     label: "Productive Analysis and Forecasting",
-    //     href: "/#services",
-    //   },
-    //   {
-    //     label: "Custom machine learning solutions",
-    //     href: "/#services",
-    //   },
-    //   {
-    //     label: "NLP and Text intelligence",
-    //     href: "/#services",
-    //   },
-    //   {
-    //     label: "AI in healthcare",
-    //     href: "/#services",
-    //   },
-    //   {
-    //     label: "AI for ecommerce and marketing",
-    //     href: "/#services",
-    //   },
-    //   {
-    //     label: "AI document processing",
-    //     href: "/#services",
-    //   },
-    //   {
-    //     label: "AI for ed-tech",
-    //     href: "/#services",
-    //   },
-    //   {
-    //     label: "AI for finance and fintech",
-    //     href: "/#services",
-    //   },
-    // ],
-  },
-  { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "/contact" },
-];
-
-type NavLink = (typeof navLinks)[number] & {
+type NavLink = {
+  label: string;
+  href: string;
   subMenu?: { label: string; href: string }[];
 };
 
@@ -129,6 +77,23 @@ const NavLinks = ({
   className?: string;
   onNavigate?: () => void;
 }) => {
+  const t = useTranslations("nav");
+
+  const navLinks: NavLink[] = [
+    { label: t("home"), href: "/" },
+    {
+      label: t("company"),
+      href: "/",
+      subMenu: [
+        { label: t("aboutUs"), href: "/about-us" },
+        { label: t("faq"), href: "/#faq" },
+      ],
+    },
+    { label: t("services"), href: "/#services" },
+    { label: t("blog"), href: "/blog" },
+    { label: t("contact"), href: "/contact" },
+  ];
+
   return (
     <nav
       className={cn("flex flex-col md:flex-row items-center gap-8", className)}
@@ -147,11 +112,13 @@ const NavLinks = ({
           </Link>
         ),
       )}
+      <LanguageSwitcher />
     </nav>
   );
 };
 
 export default function Navbar() {
+  const t = useTranslations("nav");
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
@@ -242,12 +209,13 @@ export default function Navbar() {
               open && "bg-white text-[#FF5722]",
             )}
           >
-            Contact
+            {t("contact")}
           </Link>
         </div>
         <Button
           variant="ghost"
           size="icon"
+          aria-label={open ? t("closeMenu") : t("openMenu")}
           className={cn(
             "absolute right-4 top-0 md:hidden text-[#FF5722]",
             open && "text-white",
