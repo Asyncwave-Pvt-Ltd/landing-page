@@ -9,29 +9,23 @@ import {
   TrendingUp,
 } from "lucide-react";
 import CTABanner from "@/components/sections/cta-banner";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { alternates } from "@/i18n/seo";
 
-interface Props {
-  params: { locale: string };
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const t = await getTranslations({
-    locale: params.locale,
-    namespace: "metadata.about",
-  });
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const t = await getTranslations("metadata.about");
 
   return {
     title: t("title"),
     description: t("description"),
     keywords: t("keywords").split(", "),
-    alternates: alternates("/about-us", params.locale),
+    alternates: alternates("/about-us", locale),
     openGraph: {
       title: t("title"),
       description: t("ogDescription"),
-      url: alternates("/about-us", params.locale).canonical,
+      url: alternates("/about-us", locale).canonical,
       siteName: "Asyncwave",
       type: "website",
     },
@@ -60,9 +54,8 @@ const stepArrows = [
   null,
 ];
 
-export default async function AboutUsPage({ params }: Props) {
-  setRequestLocale(params.locale);
-  const t = await getTranslations({ locale: params.locale, namespace: "about" });
+export default async function AboutUsPage() {
+  const t = await getTranslations("about");
 
   const steps = t.raw("steps") as { title: string; description: string }[];
   const beliefs = t.raw("beliefs") as { title: string; description: string }[];

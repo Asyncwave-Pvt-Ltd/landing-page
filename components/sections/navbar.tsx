@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { LanguageSwitcher } from "@/components/sections/language-switcher";
+import { SERVICE_SLUGS } from "@/lib/services";
 
 type NavLink = {
   label: string;
@@ -89,7 +90,14 @@ const NavLinks = ({
         { label: t("faq"), href: "/#faq" },
       ],
     },
-    { label: t("services"), href: "/#services" },
+    {
+      label: t("services"),
+      href: "/services",
+      subMenu: SERVICE_SLUGS.map((slug) => ({
+        label: t(`servicesSubmenu.${slug}`),
+        href: `/services/${slug}`,
+      })),
+    },
     { label: t("blog"), href: "/blog" },
     { label: t("contact"), href: "/contact" },
   ];

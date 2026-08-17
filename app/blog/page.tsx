@@ -1,41 +1,35 @@
 import type { Metadata } from "next";
 import { getAllPosts } from "@/lib/blog";
 import { ArrowRight } from "lucide-react";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { alternates } from "@/i18n/seo";
 import { localeHreflang, type Locale } from "@/i18n/routing";
 
-interface Props {
-  params: { locale: string };
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const t = await getTranslations({
-    locale: params.locale,
-    namespace: "metadata.blog",
-  });
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const t = await getTranslations("metadata.blog");
 
   return {
     title: t("title"),
     description: t("description"),
     keywords: t("keywords").split(", "),
-    alternates: alternates("/blog", params.locale),
+    alternates: alternates("/blog", locale),
     openGraph: {
       title: t("ogTitle"),
       description: t("ogDescription"),
-      url: alternates("/blog", params.locale).canonical,
+      url: alternates("/blog", locale).canonical,
       siteName: "Asyncwave",
       type: "website",
     },
   };
 }
 
-export default async function BlogPage({ params }: Props) {
-  setRequestLocale(params.locale);
-  const t = await getTranslations({ locale: params.locale, namespace: "blog" });
+export default async function BlogPage() {
+  const locale = await getLocale();
+  const t = await getTranslations("blog");
   const posts = await getAllPosts();
-  const dateLocale = localeHreflang[params.locale as Locale];
+  const dateLocale = localeHreflang[locale as Locale];
 
   return (
     <main className="h-full bg-white">

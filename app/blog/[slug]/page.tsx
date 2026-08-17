@@ -1,42 +1,33 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getPostBySlug, getAllSlugs } from "@/lib/blog";
+import { getPostBySlug } from "@/lib/blog";
 import { ArrowLeft, Clock, Tag } from "lucide-react";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { alternates } from "@/i18n/seo";
-import { localeHreflang, routing, type Locale } from "@/i18n/routing";
+import { localeHreflang, type Locale } from "@/i18n/routing";
 
 interface Props {
-  params: { locale: string; slug: string };
-}
-
-export async function generateStaticParams() {
-  const slugs = await getAllSlugs();
-  return routing.locales.flatMap((locale) =>
-    slugs.map((slug) => ({ locale, slug })),
-  );
+  params: { slug: string };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
   if (!post) return {};
 
-  const t = await getTranslations({
-    locale: params.locale,
-    namespace: "metadata.post",
-  });
+  const locale = await getLocale();
+  const t = await getTranslations("metadata.post");
   const path = `/blog/${post.slug}`;
 
   return {
     title: t("titleSuffix", { title: post.title }),
     description: post.description,
     keywords: post.keywords,
-    alternates: alternates(path, params.locale),
+    alternates: alternates(path, locale),
     openGraph: {
       title: post.title,
       description: post.description,
-      url: alternates(path, params.locale).canonical,
+      url: alternates(path, locale).canonical,
       siteName: "Asyncwave",
       type: "article",
       publishedTime: post.publishedAt,
@@ -61,12 +52,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  setRequestLocale(params.locale);
   const post = await getPostBySlug(params.slug);
   if (!post) notFound();
 
-  const t = await getTranslations({ locale: params.locale, namespace: "post" });
-  const dateLocale = localeHreflang[params.locale as Locale];
+  const locale = await getLocale();
+  const t = await getTranslations("post");
+  const dateLocale = localeHreflang[locale as Locale];
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -91,7 +82,7 @@ export default async function BlogPostPage({ params }: Props) {
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": alternates(`/blog/${post.slug}`, params.locale).canonical,
+      "@id": alternates(`/blog/${post.slug}`, locale).canonical,
     },
     ...(post.coverImage && { image: post.coverImage.url }),
   };

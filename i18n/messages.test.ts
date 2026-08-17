@@ -5,7 +5,7 @@
  */
 import assert from "node:assert";
 import { readFileSync } from "node:fs";
-import { routing } from "./routing";
+import { defaultLocale, locales } from "./routing";
 
 // Leaf key paths, with array indices collapsed so list lengths are compared too.
 function keys(value: unknown, prefix = ""): string[] {
@@ -23,10 +23,10 @@ const load = (locale: string) =>
     readFileSync(new URL(`../messages/${locale}.json`, import.meta.url), "utf8"),
   );
 
-const base = keys(load(routing.defaultLocale)).sort();
+const base = keys(load(defaultLocale)).sort();
 
-for (const locale of routing.locales) {
-  if (locale === routing.defaultLocale) continue;
+for (const locale of locales) {
+  if (locale === defaultLocale) continue;
   const other = keys(load(locale)).sort();
 
   const missing = base.filter((k) => !other.includes(k));

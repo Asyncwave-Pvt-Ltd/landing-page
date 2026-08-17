@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "../globals.css";
+import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import QueryProvider from "@/components/providers/query-provider";
 import { Inter } from "next/font/google";
@@ -9,17 +9,12 @@ import Navbar from "@/components/sections/navbar";
 import Footer from "@/components/sections/footer";
 import { RecaptchaProvider } from "@/components/recaptcha-provider";
 import { FloatingChatbot } from "@/components/floating-chatbot";
-import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { notFound } from "next/navigation";
-import { routing } from "@/i18n/routing";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
+import { locales } from "@/i18n/routing";
 import { alternates } from "@/i18n/seo";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
-
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
 
 const organizationSchema = {
   "@context": "https://schema.org",
@@ -63,20 +58,14 @@ const organizationSchema = {
       description:
         "AI Development Company India — Chatbots, Agents & Custom AI Solutions",
       publisher: { "@id": "https://asyncwave.in/#organization" },
-      inLanguage: routing.locales,
+      inLanguage: locales,
     },
   ],
 };
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
-  const t = await getTranslations({
-    locale: params.locale,
-    namespace: "metadata.home",
-  });
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const t = await getTranslations("metadata.home");
 
   return {
     title: t("title"),
@@ -86,10 +75,10 @@ export async function generateMetadata({
     openGraph: {
       title: t("title"),
       description: t("ogDescription"),
-      url: alternates("", params.locale).canonical,
+      url: alternates("", locale).canonical,
       siteName: "Asyncwave",
       type: "website",
-      locale: params.locale === "hi" ? "hi_IN" : "en_IN",
+      locale: locale === "hi" ? "hi_IN" : "en_IN",
       images: [
         {
           url: "https://asyncwave.in/og-image.png",
@@ -113,7 +102,7 @@ export async function generateMetadata({
         follow: true,
       },
     },
-    alternates: alternates("", params.locale),
+    alternates: alternates("", locale),
     icons: {
       icon: [
         { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -130,16 +119,12 @@ export async function generateMetadata({
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-  params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
 }) {
-  const { locale } = params;
-  if (!hasLocale(routing.locales, locale)) notFound();
-  setRequestLocale(locale);
+  const locale = await getLocale();
 
   return (
     <html lang={locale} className={cn("font-sans", inter.variable)}>

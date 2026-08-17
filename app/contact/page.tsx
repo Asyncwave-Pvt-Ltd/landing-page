@@ -1,33 +1,23 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/sections/contact-form";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { alternates } from "@/i18n/seo";
 
-interface Props {
-  params: { locale: string };
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const t = await getTranslations({
-    locale: params.locale,
-    namespace: "metadata.contact",
-  });
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const t = await getTranslations("metadata.contact");
 
   return {
     title: t("title"),
     description: t("description"),
     keywords: t("keywords").split(", "),
-    alternates: alternates("/contact", params.locale),
+    alternates: alternates("/contact", locale),
   };
 }
 
 // reCAPTCHA provider now lives in the root layout — shared with the chatbot.
-export default async function ContactPage({ params }: Props) {
-  setRequestLocale(params.locale);
-  const t = await getTranslations({
-    locale: params.locale,
-    namespace: "contact",
-  });
+export default async function ContactPage() {
+  const t = await getTranslations("contact");
 
   return (
     <div className="bg-card rounded-2xl border p-4 m-4 md:m-6 lg:m-8 mt-20 md:mt-20 lg:mt-20">

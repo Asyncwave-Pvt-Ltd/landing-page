@@ -9,7 +9,18 @@
     "contact": "Contact",
     "language": "Language",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "servicesSubmenu": {
+      "ai-chatbot": "AI powered Chatbot Development",
+      "productive-analysis": "Productive Analysis and Forecasting",
+      "custom-ml": "Custom machine learning solutions",
+      "text-intelligence": "NLP and Text intelligence",
+      "healthcare": "AI in healthcare",
+      "ecomm": "AI for ecommerce and marketing",
+      "doc-processing": "AI document processing",
+      "ed-tech": "AI for ed-tech",
+      "fintech": "AI for finance and fintech"
+    }
   },
   "hero": {
     "badge": "AI-First Software Studio",
@@ -21,10 +32,22 @@
     "ctaSecondary": "Explore Services",
     "imageAlt": "Asyncwave team building AI products",
     "stats": [
-      { "value": "20+", "label": "Projects Delivered" },
-      { "value": "10+", "label": "Happy Clients" },
-      { "value": "2+", "label": "Years Experience" },
-      { "value": "100%", "label": "Client Satisfaction" }
+      {
+        "value": "20+",
+        "label": "Projects Delivered"
+      },
+      {
+        "value": "10+",
+        "label": "Happy Clients"
+      },
+      {
+        "value": "2+",
+        "label": "Years Experience"
+      },
+      {
+        "value": "100%",
+        "label": "Client Satisfaction"
+      }
     ]
   },
   "services": {
@@ -76,6 +99,16 @@
       "Proven results across diverse industries"
     ],
     "cta": "Start a Project"
+  },
+  "serviceChatbot": {
+    "badge": "AI CHATBOT DEVELOPMENT",
+    "titlePrefix": "Chatbots that understand context,",
+    "titleHighlight": "not just keywords",
+    "subtitle": "Intelligent chatbots that resolve queries instantly and provide 24/7 support across every channel your customers use — from concept to production.",
+    "cta": "Get Started",
+    "caseEyebrow": "CASE STUDY · FINTECH",
+    "caseTitle": "Multilingual support bot, −62% tickets",
+    "caseLink": "Read the breakdown →"
   },
   "faq": {
     "eyebrow": "FAQ",
@@ -302,7 +335,11 @@
     "dockPlaceholder": "Ask our bot which of these fits your use case…",
     "ask": "Ask",
     "error": "Something went wrong on our side. Please try again.",
-    "chips": ["Customer support", "Sales / lead qual", "Internal ops"]
+    "chips": [
+      "Customer support",
+      "Sales / lead qual",
+      "Internal ops"
+    ]
   },
   "metadata": {
     "home": {
@@ -333,6 +370,223 @@
     },
     "post": {
       "titleSuffix": "{title} | Asyncwave Blog"
+    },
+    "serviceChatbot": {
+      "title": "AI Chatbot Development Services | Asyncwave",
+      "description": "Context-aware AI chatbots that resolve customer queries instantly across every channel. Built and shipped by Asyncwave — from concept to production.",
+      "keywords": "AI chatbot development, chatbot development company India, GPT chatbot development, customer support chatbot, multilingual chatbot"
+    },
+    "servicePages": {
+      "productive-analysis": {
+        "title": "Predictive Analysis & Forecasting Services | Asyncwave",
+        "description": "Demand, revenue and risk forecasting built on your own data. Asyncwave delivers forecasting models as dashboards and APIs your teams already use.",
+        "keywords": "predictive analytics services, demand forecasting AI, revenue forecasting model, anomaly detection company, time series forecasting India"
+      },
+      "custom-ml": {
+        "title": "Custom Machine Learning Development | Asyncwave",
+        "description": "Custom ML models scoped, trained and deployed for your data — from prototype to monitored production API. Built by Asyncwave.",
+        "keywords": "custom machine learning development, ML model development company, LLM fine-tuning services, MLOps deployment, machine learning consulting India"
+      },
+      "text-intelligence": {
+        "title": "NLP & Text Intelligence Services | Asyncwave",
+        "description": "Entity extraction, semantic search, RAG and summarisation over your documents, tickets and reviews. NLP systems built by Asyncwave.",
+        "keywords": "NLP development services, text intelligence, semantic search RAG, document classification AI, entity extraction company"
+      },
+      "healthcare": {
+        "title": "AI in Healthcare Solutions | Asyncwave",
+        "description": "Clinical documentation, diagnostic support and PHI-safe AI built around compliance and auditability. Healthcare AI by Asyncwave.",
+        "keywords": "AI in healthcare, clinical documentation AI, medical imaging AI, HIPAA compliant AI, healthcare AI development company"
+      },
+      "ecomm": {
+        "title": "AI for Ecommerce & Marketing | Asyncwave",
+        "description": "Recommendations, natural-language product search and campaign automation wired into your storefront. Ecommerce AI by Asyncwave.",
+        "keywords": "AI for ecommerce, product recommendation engine, ecommerce personalization AI, AI marketing automation, visual search ecommerce"
+      },
+      "doc-processing": {
+        "title": "AI Document Processing Services | Asyncwave",
+        "description": "Invoices, claims, KYC and contracts turned into structured data with intelligent OCR, validation and human-in-the-loop review.",
+        "keywords": "AI document processing, intelligent document processing, OCR automation services, invoice data extraction AI, KYC automation"
+      },
+      "ed-tech": {
+        "title": "AI for Ed-Tech & Learning Platforms | Asyncwave",
+        "description": "Adaptive tutors, automated assessment and content generation for learning platforms. Ed-tech AI built by Asyncwave.",
+        "keywords": "AI for edtech, adaptive learning AI, AI tutor development, automated grading AI, edtech AI development company"
+      },
+      "fintech": {
+        "title": "AI for Finance & Fintech | Asyncwave",
+        "description": "Fraud detection, risk scoring and underwriting support with reason codes and full audit trails. Fintech AI built by Asyncwave.",
+        "keywords": "AI for fintech, fraud detection AI, credit risk scoring model, underwriting automation AI, financial AI development company"
+      }
+    }
+  },
+  "servicePages": {
+    "productive-analysis": {
+      "badge": "PREDICTIVE ANALYSIS & FORECASTING",
+      "titlePrefix": "Forecasts your team can",
+      "titleHighlight": "actually plan around",
+      "subtitle": "Turn historical data into demand, revenue and risk forecasts — delivered as dashboards and APIs your teams already use.",
+      "cta": "Get Started",
+      "features": [
+        {
+          "title": "Demand & Revenue Forecasting",
+          "description": "Time-series models tuned to your seasonality, promotions and pipeline — with confidence intervals, not single guesses."
+        },
+        {
+          "title": "Anomaly Detection",
+          "description": "Catch churn spikes, fraud patterns and supply gaps the moment they deviate from the expected curve."
+        },
+        {
+          "title": "Decision Dashboards",
+          "description": "Forecasts land where decisions happen — BI tools, internal apps or a plain API your systems can call."
+        }
+      ]
+    },
+    "custom-ml": {
+      "badge": "CUSTOM MACHINE LEARNING",
+      "titlePrefix": "Models built for your data,",
+      "titleHighlight": "not a generic benchmark",
+      "subtitle": "From problem framing to a deployed, monitored model — custom ML that solves the specific thing your business needs solved.",
+      "cta": "Get Started",
+      "features": [
+        {
+          "title": "Problem to Prototype",
+          "description": "We scope the use case, audit your data and ship a working prototype before committing to a full build."
+        },
+        {
+          "title": "Training & Fine-Tuning",
+          "description": "Classic ML, deep learning or fine-tuned LLMs — whichever actually wins on your accuracy and cost targets."
+        },
+        {
+          "title": "Deployment & Monitoring",
+          "description": "Models shipped behind versioned APIs with drift tracking, retraining pipelines and rollback built in."
+        }
+      ]
+    },
+    "text-intelligence": {
+      "badge": "NLP & TEXT INTELLIGENCE",
+      "titlePrefix": "Make sense of every",
+      "titleHighlight": "line of text you own",
+      "subtitle": "Classification, extraction, search and summarisation over the documents, tickets and reviews already sitting in your systems.",
+      "cta": "Get Started",
+      "features": [
+        {
+          "title": "Entity & Intent Extraction",
+          "description": "Pull structured fields, entities and intent out of free text — tickets, emails, contracts, transcripts."
+        },
+        {
+          "title": "Semantic Search & RAG",
+          "description": "Retrieval pipelines that answer questions from your own corpus, with citations back to the source."
+        },
+        {
+          "title": "Sentiment & Summaries",
+          "description": "Roll thousands of reviews or support threads into themes and sentiment your team can act on."
+        }
+      ]
+    },
+    "healthcare": {
+      "badge": "AI IN HEALTHCARE",
+      "titlePrefix": "Clinical-grade AI, built",
+      "titleHighlight": "around compliance",
+      "subtitle": "AI that supports clinicians and back-office teams — designed from day one around privacy, auditability and consent.",
+      "cta": "Get Started",
+      "features": [
+        {
+          "title": "Clinical Documentation",
+          "description": "Summarise notes, code encounters and draft reports so clinicians spend their time with patients instead of forms."
+        },
+        {
+          "title": "Diagnostic Support",
+          "description": "Imaging and signal models that surface findings for review — assistive by design, never the final word."
+        },
+        {
+          "title": "Privacy by Default",
+          "description": "PHI redaction, role-based access, full audit trails and deployment inside your own cloud boundary."
+        }
+      ]
+    },
+    "ecomm": {
+      "badge": "AI FOR ECOMMERCE & MARKETING",
+      "titlePrefix": "Personalisation that moves",
+      "titleHighlight": "revenue, not vanity metrics",
+      "subtitle": "Recommendations, search and campaign automation wired straight into your storefront and marketing stack.",
+      "cta": "Get Started",
+      "features": [
+        {
+          "title": "Recommendations",
+          "description": "Product and bundle recommendations tuned to real purchase behaviour, not last-viewed heuristics."
+        },
+        {
+          "title": "Smarter Product Search",
+          "description": "Natural-language and visual search that understands intent, synonyms and long-tail queries."
+        },
+        {
+          "title": "Campaign Automation",
+          "description": "Generate copy, segment audiences and trigger journeys automatically — measured against conversion, not clicks."
+        }
+      ]
+    },
+    "doc-processing": {
+      "badge": "AI DOCUMENT PROCESSING",
+      "titlePrefix": "From PDF pile to",
+      "titleHighlight": "structured data",
+      "subtitle": "Invoices, claims, KYC packets and contracts parsed into clean records — with humans reviewing only the edge cases.",
+      "cta": "Get Started",
+      "features": [
+        {
+          "title": "Intelligent OCR",
+          "description": "Read scans, photos and messy layouts — tables, stamps and handwriting included."
+        },
+        {
+          "title": "Field Extraction & Validation",
+          "description": "Map documents to your schema and validate against business rules before anything hits your database."
+        },
+        {
+          "title": "Human in the Loop",
+          "description": "Low-confidence extractions route to a review queue, and every correction feeds the next model version."
+        }
+      ]
+    },
+    "ed-tech": {
+      "badge": "AI FOR ED-TECH",
+      "titlePrefix": "Learning that adapts to",
+      "titleHighlight": "every single student",
+      "subtitle": "Tutors, assessments and content pipelines that respond to how each learner is actually doing.",
+      "cta": "Get Started",
+      "features": [
+        {
+          "title": "Adaptive Tutoring",
+          "description": "Conversational tutors that follow your curriculum, track mastery and adjust difficulty per learner."
+        },
+        {
+          "title": "Automated Assessment",
+          "description": "Grade open-ended answers and code with rubric-aligned scoring plus feedback students can use."
+        },
+        {
+          "title": "Content Generation",
+          "description": "Generate question banks, explanations and practice sets from your existing material — reviewed before publish."
+        }
+      ]
+    },
+    "fintech": {
+      "badge": "AI FOR FINANCE & FINTECH",
+      "titlePrefix": "AI for money movement,",
+      "titleHighlight": "built to be audited",
+      "subtitle": "Risk scoring, fraud detection and back-office automation with the explainability your regulators will ask for.",
+      "cta": "Get Started",
+      "features": [
+        {
+          "title": "Fraud & Risk Scoring",
+          "description": "Real-time scoring on transactions and applications, tuned for the false-positive rate your ops team can absorb."
+        },
+        {
+          "title": "Underwriting Support",
+          "description": "Pull signals from statements, bureau data and documents into credit decisions your analysts can trace."
+        },
+        {
+          "title": "Explainable by Design",
+          "description": "Every decision ships with reason codes, versioned model lineage and a full audit trail."
+        }
+      ]
     }
   }
 }
