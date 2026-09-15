@@ -3,7 +3,7 @@ import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 import { verifyRecaptcha } from "@/lib/recaptcha";
 import { contactFormRequestSchema } from "@/lib/schema";
-import { sendEmail } from "@/lib/aws";
+import { appendRow } from "@/lib/sheets";
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,21 +18,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    await sendEmail({
-      to: [process.env.AWS_SES_TO_EMAIL ?? "contact@asyncwave.in"],
-      subject: "New Query from Asyncwave Contact Form",
-      body: `
-New Message from Asyncwave Contact Form:
-------------------------------------------
-Name: ${validatedData.fullName}
-Email: ${validatedData.email}
-Message: ${validatedData.message}
-Services: ${validatedData.services.join(", ")}
-Phone: ${validatedData.phone || "N/A"}
-Budget: ${validatedData.budget}
-Timeline: ${validatedData.timeline}
-      `.trim(),
-    });
+    await appendRow([
+      new Date().toISOString(),
+      validatedData.fullName,
+      validatedData.email,
+      validatedData.phone || "N/A",
+      validatedData.services.join(", "),
+      validatedData.budget,
+      validatedData.timeline,
+      validatedData.message,
+    ]);
 
     return NextResponse.json(
       { message: "Message sent successfully" },
