@@ -1,6 +1,7 @@
 import Hero from "@/components/sections/hero";
 import Services from "@/components/sections/services";
 import WhyAsyncwave from "@/components/sections/why-asyncwave";
+import CaseStudies from "@/components/sections/case-studies";
 import FAQ from "@/components/sections/faq";
 import CTABanner from "@/components/sections/cta-banner";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -29,6 +30,7 @@ export default async function HomePage() {
       <Hero />
       <Services />
       <WhyAsyncwave />
+      <CaseStudies />
       <FAQ />
       <CTABanner />
     </main>

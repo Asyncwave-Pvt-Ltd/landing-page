@@ -1,39 +1,21 @@
 import { ArrowRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+import { getCaseStudies } from "@/lib/case-studies";
 
-const cases = [
-  {
-    category: "AI Chatbot",
-    title: "E-Commerce Support Bot",
-    description:
-      "Built a context-aware AI assistant that handles 80% of customer queries autonomously, reducing support costs significantly.",
-    tags: ["OpenAI GPT-4", "Next.js", "AWS"],
-  },
-  {
-    category: "Agentic Workflow",
-    title: "Automated Sales Pipeline",
-    description:
-      "Deployed multi-agent workflow that qualifies leads, drafts outreach, and schedules follow-ups — all without human intervention.",
-    tags: ["LangChain", "Claude", "CRM Integration"],
-  },
-  {
-    category: "AI Product",
-    title: "AI-Powered Learning Platform",
-    description:
-      "Personalized tutor that adapts to each student's learning pace, identifying knowledge gaps and delivering targeted content.",
-    tags: ["Anthropic Claude", "React Native", "GCP"],
-  },
-  {
-    category: "Web & Mobile",
-    title: "Real-Time Analytics Dashboard",
-    description:
-      "Full-stack SaaS with AI-driven insights, real-time data visualization, and predictive analytics for business intelligence.",
-    tags: ["Next.js", "TypeScript", "D3.js"],
-  },
-];
+/** Newest studies on the home page. Renders nothing until the CMS has some. */
+const LIMIT = 4;
 
-export default function CaseStudies() {
+export default async function CaseStudies() {
+  const [t, studies] = await Promise.all([
+    getTranslations("caseStudies"),
+    getCaseStudies(),
+  ]);
+
+  if (studies.length === 0) return null;
+
   return (
     <section id="case-studies" className="py-24 bg-[#0D1B2A]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,45 +24,42 @@ export default function CaseStudies() {
           <div>
             <span className="inline-flex items-center gap-2 text-[#FF5722] text-xs font-bold uppercase tracking-widest mb-4">
               <span className="w-6 h-[2px] bg-[#FF5722]" />
-              Our Work
+              {t("eyebrow")}
             </span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-white leading-tight">
-              Case Studies
+              {t("title")}
             </h2>
           </div>
-          <p className="text-white/50 max-w-xs text-sm">
-            A selection of recent projects that showcase what we build.
-          </p>
+          <p className="text-white/50 max-w-xs text-sm">{t("subtitle")}</p>
         </div>
 
         {/* Cards */}
         <div className="grid md:grid-cols-2 gap-6">
-          {cases.map((c) => (
-            <Card
-              key={c.title}
-              className="group bg-[#0F2231] border border-white/10 rounded-lg p-8 hover:border-[#FF5722] transition-colors cursor-pointer"
-            >
-              <span className="inline-block text-[#FF5722] text-xs font-bold uppercase tracking-widest mb-4">
-                {c.category}
-              </span>
-              <h3 className="text-xl font-bold text-white mb-3">{c.title}</h3>
-              <p className="text-white/50 text-sm leading-relaxed mb-6">
-                {c.description}
-              </p>
-              <div className="flex flex-wrap gap-2 mb-6">
-                {c.tags.map((tag) => (
-                  <Badge
-                    key={tag}
-                    className="text-xs bg-white/10 text-white/70 px-3 py-1 rounded-full border-transparent"
-                  >
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-              <span className="inline-flex items-center gap-1 text-[#FF5722] text-sm font-semibold group-hover:gap-2 transition-all">
-                View Case Study <ArrowRight className="w-4 h-4" />
-              </span>
-            </Card>
+          {studies.slice(0, LIMIT).map((c) => (
+            <Link key={c.slug} href={`/case-studies/${c.slug}`} className="group">
+              <Card className="h-full bg-[#0F2231] border border-white/10 rounded-lg p-8 hover:border-[#FF5722] transition-colors">
+                <span className="inline-block text-[#FF5722] text-xs font-bold uppercase tracking-widest mb-4">
+                  {c.eyebrow}
+                </span>
+                <h3 className="text-xl font-bold text-white mb-3">{c.title}</h3>
+                <p className="text-white/50 text-sm leading-relaxed mb-6">
+                  {c.description}
+                </p>
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {c.tags.map((tag) => (
+                    <Badge
+                      key={tag}
+                      className="text-xs bg-white/10 text-white/70 px-3 py-1 rounded-full border-transparent"
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+                <span className="inline-flex items-center gap-1 text-[#FF5722] text-sm font-semibold group-hover:gap-2 transition-all">
+                  {t("view")} <ArrowRight className="w-4 h-4" />
+                </span>
+              </Card>
+            </Link>
           ))}
         </div>
       </div>

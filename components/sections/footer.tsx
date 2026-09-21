@@ -45,6 +45,7 @@ export default function Footer() {
   const companyLinks = [
     { label: t("companyLinks.about"), href: "/#why-us" },
     { label: t("companyLinks.blog"), href: "/blog" },
+    { label: t("companyLinks.caseStudies"), href: "/case-studies" },
     { label: t("companyLinks.faq"), href: "/#faq" },
     { label: t("companyLinks.contact"), href: "/contact" },
   ];

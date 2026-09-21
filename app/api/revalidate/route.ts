@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 //   URL:        https://asyncwave.in/api/revalidate?secret=<SANITY_REVALIDATE_SECRET>
 //   Dataset:    production
 //   Trigger on: Create, Update, Delete
-//   Filter:     _type == "post"
+//   Filter:     _type in ["post", "caseStudy"]
 //   Projection: {"slug": slug.current}
 
 export async function POST(req: NextRequest) {
@@ -26,8 +26,13 @@ export async function POST(req: NextRequest) {
   }
 
   revalidateTag("blog-posts");
+  revalidateTag("case-studies");
   revalidatePath("/blog");
-  if (slug) revalidatePath(`/blog/${slug}`);
+  revalidatePath("/case-studies");
+  if (slug) {
+    revalidatePath(`/blog/${slug}`);
+    revalidatePath(`/case-studies/${slug}`);
+  }
 
   return NextResponse.json({
     revalidated: true,

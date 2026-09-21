@@ -106,8 +106,6 @@
     "titleHighlight": "not just keywords",
     "subtitle": "Intelligent chatbots that resolve queries instantly and provide 24/7 support across every channel your customers use — from concept to production.",
     "cta": "Get Started",
-    "caseEyebrow": "CASE STUDY · FINTECH",
-    "caseTitle": "Multilingual support bot, −62% tickets",
     "caseLink": "Read the breakdown →"
   },
   "faq": {
@@ -163,6 +161,7 @@
     "companyLinks": {
       "about": "About Us",
       "blog": "Blogs",
+      "caseStudies": "Case Studies",
       "faq": "FAQ",
       "contact": "Contact"
     },
@@ -247,6 +246,19 @@
     "emptyLink": "contact us",
     "emptyBodyAfter": "with a topic you'd like us to cover.",
     "read": "Read"
+  },
+  "caseStudies": {
+    "eyebrow": "Our Work",
+    "title": "Case Studies",
+    "subtitle": "A selection of recent projects that showcase what we build.",
+    "view": "View Case Study",
+    "emptyTitle": "Case studies coming soon.",
+    "emptyBodyBefore": "Check back shortly or",
+    "emptyLink": "contact us",
+    "emptyBodyAfter": "to talk about your own project."
+  },
+  "caseStudy": {
+    "back": "Back"
   },
   "post": {
     "back": "Back to Blog",
@@ -362,6 +374,13 @@
       "ogTitle": "AI Development Blog | Asyncwave",
       "ogDescription": "Practical guides on AI chatbots, agentic workflows, and building AI products in India.",
       "keywords": "AI development blog India, AI chatbot guide, agentic workflow tutorial, LLM integration guide, AI product development insights"
+    },
+    "caseStudies": {
+      "title": "AI Case Studies — Projects We've Shipped | Asyncwave",
+      "description": "Real AI chatbot, automation and machine learning projects Asyncwave has built — the problem, the approach, and the measured outcome.",
+      "ogTitle": "AI Case Studies | Asyncwave",
+      "ogDescription": "Real AI projects Asyncwave has shipped — problem, approach, outcome.",
+      "keywords": "AI case studies, AI chatbot case study, machine learning project examples, AI automation results, AI development company India"
     },
     "contact": {
       "title": "Contact Asyncwave — Get a Free AI Project Quote",

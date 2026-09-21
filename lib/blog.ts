@@ -42,7 +42,7 @@ export interface SanityPost {
 
 // ─── Portable Text → HTML ────────────────────────────────────────────────────
 
-const ptComponents: Partial<PortableTextHtmlComponents> = {
+export const ptComponents: Partial<PortableTextHtmlComponents> = {
   types: {
     // `url` is resolved in the GROQ projection below
     image: ({ value }) =>
@@ -89,10 +89,14 @@ export function mapPost(raw: SanityPost): BlogPost {
 const CACHE_TAG = "blog-posts";
 const REVALIDATE_SECONDS = 3600;
 
-async function query<T>(groq: string, params: Record<string, unknown> = {}): Promise<T | null> {
+export async function query<T>(
+  groq: string,
+  params: Record<string, unknown> = {},
+  tag: string = CACHE_TAG,
+): Promise<T | null> {
   try {
     return await sanityClient.fetch<T>(groq, params, {
-      next: { tags: [CACHE_TAG], revalidate: REVALIDATE_SECONDS },
+      next: { tags: [tag], revalidate: REVALIDATE_SECONDS },
     });
   } catch (err) {
     console.error("[Sanity] query failed:", err);
@@ -101,7 +105,7 @@ async function query<T>(groq: string, params: Record<string, unknown> = {}): Pro
 }
 
 // `pt::text(body)` gives the plain text without shipping the whole body to the list page.
-const CARD_FIELDS = `
+export const CARD_FIELDS = `
   "slug": slug.current,
   title,
   description,

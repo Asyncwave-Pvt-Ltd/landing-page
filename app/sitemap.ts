@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { getAllSlugs } from "@/lib/blog";
+import { getAllCaseStudySlugs } from "@/lib/case-studies";
 import { defaultLocale, locales, localeHreflang } from "@/i18n/routing";
 import { localeUrl } from "@/i18n/seo";
 import { SERVICE_SLUGS } from "@/lib/services";
@@ -20,7 +21,10 @@ function entry(path: string, rest: Omit<Entry, "url" | "alternates">): Entry {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const slugs = await getAllSlugs();
+  const [slugs, caseSlugs] = await Promise.all([
+    getAllSlugs(),
+    getAllCaseStudySlugs(),
+  ]);
   const lastModified = new Date();
 
   return [
@@ -38,6 +42,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }),
     ),
     entry("/blog", { lastModified, changeFrequency: "weekly", priority: 0.8 }),
+    entry("/case-studies", {
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    }),
     entry("/contact", {
       lastModified,
       changeFrequency: "monthly",
@@ -47,6 +56,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       entry(`/blog/${slug}`, {
         lastModified,
         changeFrequency: "weekly",
+        priority: 0.7,
+      }),
+    ),
+    ...caseSlugs.map((slug) =>
+      entry(`/case-studies/${slug}`, {
+        lastModified,
+        changeFrequency: "monthly",
         priority: 0.7,
       }),
     ),
