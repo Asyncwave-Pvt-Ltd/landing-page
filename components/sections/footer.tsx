@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Linkedin, Github, Mail, Instagram } from "lucide-react";
+import { Linkedin, Github, Mail, Instagram, Facebook } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
@@ -13,6 +13,11 @@ const socialLinks = [
     icon: Instagram,
     href: "https://www.instagram.com/asyncwave_pvt_ltd",
     label: "Instagram",
+  },
+  {
+    icon: Facebook,
+    href: "https://www.facebook.com/p/Asyncwave-61594031960173/",
+    label: "Facebook",
   },
   {
     icon: Linkedin,
